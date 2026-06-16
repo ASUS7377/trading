@@ -26,3 +26,17 @@ Trading Journal is a web application built with Django.
 ## Author
 
 Assadulloh
+
+## Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.jpg)
+
+### Statistics
+
+![Statistics](screenshots/statistics.jpg)
+
+### Calendar
+
+![Calendar](screenshots/calendar.jpg)
