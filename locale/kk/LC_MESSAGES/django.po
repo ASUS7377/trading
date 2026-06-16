@@ -1,0 +1,47 @@
+msgid "Торговый журнал"
+msgstr "Trading Journal"
+
+msgid "Журнал Трейдера"
+msgstr "Trader Journal"
+
+msgid "Главная"
+msgstr "Dashboard"
+
+msgid "Добавить сделку"
+msgstr "Add Trade"
+
+msgid "История"
+msgstr "History"
+
+msgid "Календарь"
+msgstr "Calendar"
+
+msgid "Статистика"
+msgstr "Statistics"
+
+msgid "Задачи"
+msgstr "Tasks"
+
+msgid "Профиль"
+msgstr "Profile"
+
+msgid "Язык"
+msgstr "Language"
+
+msgid "Выйти"
+msgstr "Logout"
+
+msgid "Русский"
+msgstr "Russian"
+
+msgid "English"
+msgstr "English"
+
+msgid "O'zbek"
+msgstr "Uzbek"
+
+msgid "Қазақша"
+msgstr "Kazakh"
+
+msgid "Türkçe"
+msgstr "Turkish"

@@ -1,0 +1,540 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>
+
+    Trading Journal
+
+</title>
+
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/landing.css' %}">
+
+</head>
+
+<body>
+
+<header class="landing-header">
+
+    <div class="container">
+
+        <div class="logo">
+
+            Trading Journal
+
+        </div>
+
+        <div class="header-buttons">
+
+            <a
+                href="{% url 'login' %}"
+                class="btn-login"
+            >
+
+                Войти
+
+            </a>
+
+            <a
+                href="#"
+                class="btn-register"
+            >
+
+                Регистрация
+
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content">
+
+        <h1>
+
+            Профессиональный журнал трейдера
+
+        </h1>
+
+        <p>
+
+            Контролируйте сделки, анализируйте ошибки,
+            отслеживайте статистику и растите как трейдер.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+                href="#"
+                class="btn-primary"
+            >
+
+                Начать бесплатно
+
+            </a>
+
+            <a
+                href="{% url 'login' %}"
+                class="btn-secondary"
+            >
+
+                Войти
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="features">
+
+    <div class="container">
+
+        <h2>
+
+            Возможности платформы
+
+        </h2>
+
+        <div class="features-grid">
+
+            <div class="feature-card">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                <h3>
+
+                    Статистика
+
+                </h3>
+
+                <p>
+
+                    Полный анализ торговых результатов.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="bi bi-calendar3"></i>
+
+                <h3>
+
+                    Календарь
+
+                </h3>
+
+                <p>
+
+                    Отслеживание прибыли по дням.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="bi bi-journal-text"></i>
+
+                <h3>
+
+                    Журнал сделок
+
+                </h3>
+
+                <p>
+
+                    Все сделки в одном месте.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="bi bi-bullseye"></i>
+
+                <h3>
+
+                    Финансовые цели
+
+                </h3>
+
+                <p>
+
+                    Контроль движения к результату.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="bi bi-check2-square"></i>
+
+                <h3>
+
+                    To-Do система
+
+                </h3>
+
+                <p>
+
+                    Планирование задач трейдера.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="bi bi-trophy-fill"></i>
+
+                <h3>
+
+                    Уровни трейдера
+
+                </h3>
+
+                <p>
+
+                    Рост ранга по мере увеличения прибыли.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="screenshots">
+
+    <div class="container">
+
+        <h2>
+
+            Интерфейс платформы
+
+        </h2>
+
+        <div class="screens-grid">
+
+            <div class="screen-card">
+
+                <img
+                    src="{% static 'img/dashboard.jpg' %}"
+                    alt=""
+                >
+
+                <h3>
+
+                    Dashboard
+
+                </h3>
+
+            </div>
+
+            <div class="screen-card">
+
+                <img
+                    src="{% static 'img/calendar.jpg' %}"
+                    alt=""
+                >
+
+                <h3>
+
+                    Календарь
+
+                </h3>
+
+            </div>
+
+            <div class="screen-card">
+
+                <img
+                    src="{% static 'img/statistics.jpg' %}"
+                    alt=""
+                >
+
+                <h3>
+
+                    Статистика
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="pricing">
+
+    <div class="container">
+
+        <h2>
+
+            Тарифы
+
+        </h2>
+
+        <div class="pricing-grid">
+
+            <div class="price-card">
+
+                <h3>
+
+                    Starter
+
+                </h3>
+
+                <div class="price">
+
+                    $10
+
+                </div>
+
+                <ul>
+
+                    <li>До 100 сделок</li>
+
+                    <li>Статистика</li>
+
+                    <li>Календарь</li>
+
+                </ul>
+
+            </div>
+
+            <div class="price-card popular">
+
+                <div class="badge">
+
+                    Популярный
+
+                </div>
+
+                <h3>
+
+                    Pro
+
+                </h3>
+
+                <div class="price">
+
+                    $25
+
+                </div>
+
+                <ul>
+
+                    <li>До 1000 сделок</li>
+
+                    <li>Полная аналитика</li>
+
+                    <li>Excel экспорт</li>
+
+                    <li>Уровни трейдера</li>
+
+                </ul>
+
+            </div>
+
+            <div class="price-card">
+
+                <h3>
+
+                    Premium
+
+                </h3>
+
+                <div class="price">
+
+                    $50
+
+                </div>
+
+                <ul>
+
+                    <li>Без ограничений</li>
+
+                    <li>Все функции</li>
+
+                    <li>Поддержка</li>
+
+                    <li>Будущие обновления</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="reviews">
+
+    <div class="container">
+
+        <h2>
+
+            Отзывы пользователей
+
+        </h2>
+
+        <div class="review-slider">
+
+            <div class="review active">
+
+                <h3>
+
+                    ⭐⭐⭐⭐⭐
+
+                </h3>
+
+                <p>
+
+                    Лучший журнал трейдера,
+                    который я использовал.
+
+                </p>
+
+                <span>
+
+                    Алексей
+
+                </span>
+
+            </div>
+
+            <div class="review">
+
+                <h3>
+
+                    ⭐⭐⭐⭐⭐
+
+                </h3>
+
+                <p>
+
+                    Помог найти ошибки
+                    в моей торговле.
+
+                </p>
+
+                <span>
+
+                    Илья
+
+                </span>
+
+            </div>
+
+            <div class="review">
+
+                <h3>
+
+                    ⭐⭐⭐⭐⭐
+
+                </h3>
+
+                <p>
+
+                    Очень удобный календарь
+                    и статистика.
+
+                </p>
+
+                <span>
+
+                    Михаил
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="cta">
+
+    <div class="container">
+
+        <h2>
+
+            Начните вести журнал уже сегодня
+
+        </h2>
+
+        <p>
+
+            Повышайте дисциплину,
+            анализируйте сделки и растите как трейдер.
+
+        </p>
+
+        <a
+            href="#"
+            class="btn-primary"
+        >
+
+            Создать аккаунт
+
+        </a>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <div class="container">
+
+        © 2026 Trading Journal
+
+    </div>
+
+</footer>
+
+<script src="{% static 'js/landing.js' %}"></script>
+
+</body>
+
+</html>

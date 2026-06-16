@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.user-card{
+
+    max-width:900px;
+
+    margin:0 auto;
+
+    background:#1e293b;
+
+    border-radius:24px;
+
+    padding:40px;
+}
+
+.user-card h1{
+
+    color:white;
+
+    margin-bottom:30px;
+}
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+}
+
+.info-box{
+
+    background:#0f172a;
+
+    padding:20px;
+
+    border-radius:16px;
+}
+
+.info-box span{
+
+    color:#94a3b8;
+
+    display:block;
+
+    margin-bottom:10px;
+}
+
+.info-box h3{
+
+    color:white;
+
+    margin:0;
+}
+
+.buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:30px;
+}
+
+.edit-btn{
+
+    flex:1;
+
+    background:#2563eb;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    text-align:center;
+
+    font-weight:700;
+}
+
+.delete-btn{
+
+    flex:1;
+
+    background:#dc2626;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    text-align:center;
+
+    font-weight:700;
+}
+
+.back-btn{
+
+    display:block;
+
+    margin-top:20px;
+
+    text-align:center;
+
+    color:white;
+
+    text-decoration:none;
+}
+
+@media(max-width:768px){
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .buttons{
+
+        flex-direction:column;
+    }
+
+    .user-card{
+
+        padding:20px;
+    }
+
+}
+
+</style>
+
+<div class="user-card">
+
+    <h1>
+        Пользователь
+    </h1>
+
+    <div class="info-grid">
+
+        <div class="info-box">
+
+            <span>
+                Логин
+            </span>
+
+            <h3>
+                {{ selected_user.username }}
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Имя
+            </span>
+
+            <h3>
+                {{ selected_user.first_name }}
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Фамилия
+            </span>
+
+            <h3>
+                {{ selected_user.last_name }}
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Сделок
+            </span>
+
+            <h3>
+                {{ total_trades }}
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Общая прибыль
+            </span>
+
+            <h3>
+                ${{ total_profit }}
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Регистрация
+            </span>
+
+            <h3>
+                {{ selected_user.date_joined|date:"d.m.Y" }}
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="buttons">
+
+        <a href="{% url 'edit_user' selected_user.id %}"class="edit-btn">
+
+            ✏️ Редактировать
+
+        </a>
+
+        <a
+            href="{% url 'delete_user' selected_user.id %}"
+            class="delete-btn"
+        >
+
+            🗑️ Удалить
+
+        </a>
+
+    </div>
+
+    <a
+        href="{% url 'administrator' %}"
+        class="back-btn"
+    >
+
+        ← Назад
+
+    </a>
+
+</div>
+
+{% endblock %}
+

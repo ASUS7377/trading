@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Вход</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+
+height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+background:
+linear-gradient(
+135deg,
+#020617,
+#0f172a,
+#1e293b
+);
+
+}
+
+.login-card{
+
+width:450px;
+
+background:#111827;
+
+padding:50px;
+
+border-radius:30px;
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.5);
+
+}
+
+.login-card h1{
+
+color:white;
+
+font-size:42px;
+
+margin-bottom:15px;
+}
+
+.login-card p{
+
+color:#94a3b8;
+
+margin-bottom:35px;
+}
+
+.login-card input{
+
+width:100%;
+
+padding:18px;
+
+margin-bottom:20px;
+
+border:none;
+
+border-radius:14px;
+
+background:#1f2937;
+
+color:white;
+
+font-size:16px;
+}
+
+.login-card button{
+
+width:100%;
+
+padding:18px;
+
+border:none;
+
+border-radius:14px;
+
+background:#2563eb;
+
+color:white;
+
+font-size:18px;
+
+font-weight:700;
+
+cursor:pointer;
+}
+
+.login-card button:hover{
+
+background:#1d4ed8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-card">
+
+<h1>
+Trading Journal
+</h1>
+
+<p>
+Введите логин и пароль
+</p>
+
+<form method="post">
+
+{% csrf_token %}
+
+{{ form.username }}
+
+{{ form.password }}
+
+<button type="submit">
+
+Войти
+
+</button>
+
+</form>
+
+</div>
+
+</body>
+
+</html>

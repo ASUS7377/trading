@@ -1,0 +1,799 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.history-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(
+        auto-fill,
+        minmax(350px,1fr)
+    );
+
+    gap:25px;
+
+    margin-top:30px;
+}
+
+.trade-card{
+
+    background:#1e293b;
+
+    border-radius:24px;
+
+    padding:25px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    border:1px solid transparent;
+}
+
+.trade-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:#3b82f6;
+}
+
+.trade-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.trade-symbol{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:white;
+}
+
+.trade-type{
+
+    padding:8px 14px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    color:white;
+}
+
+.buy{
+
+    background:#16a34a;
+}
+
+.sell{
+
+    background:#dc2626;
+}
+
+.trade-profit{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+}
+
+.trade-date{
+
+    color:#94a3b8;
+
+    margin-bottom:15px;
+}
+
+.trade-comment{
+
+    color:white;
+
+    line-height:1.6;
+
+    word-break:break-word;
+}
+
+.empty-box{
+
+    background:#1e293b;
+
+    border-radius:24px;
+
+    padding:60px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:20px;
+}
+.history-search{
+
+    margin-top:20px;
+
+    margin-bottom:30px;
+}
+
+.search-box{
+
+    display:flex;
+
+    gap:12px;
+
+    align-items:center;
+}
+
+.search-box input{
+
+    flex:1;
+
+    height:55px;
+
+    background:#1e293b;
+
+    border:1px solid #334155;
+
+    border-radius:14px;
+
+    padding:0 20px;
+
+    color:white;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:0.3s;
+}
+
+.search-box input:focus{
+
+    border-color:#3b82f6;
+
+    box-shadow:
+    0 0 15px rgba(
+        59,
+        130,
+        246,
+        0.3
+    );
+}
+
+.search-box input::placeholder{
+
+    color:#94a3b8;
+}
+
+.search-box button{
+
+    height:55px;
+
+    padding:0 25px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    transition:0.3s;
+}
+
+.search-box button:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+}
+.history-filters{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+
+    margin-bottom:30px;
+}
+
+.history-filters a{
+
+    text-decoration:none;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    background:#1e293b;
+
+    color:white;
+
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.history-filters a:hover{
+
+    background:#2563eb;
+
+    transform:translateY(-2px);
+}
+
+
+.pagination{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:40px;
+
+    flex-wrap:wrap;
+}
+
+.page-btn{
+
+    text-decoration:none;
+
+    background:#1e293b;
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.page-btn:hover{
+
+    background:#2563eb;
+}
+
+.page-current{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    font-weight:700;
+}
+@media(max-width:768px){
+
+    .history-grid{
+
+        grid-template-columns:1fr;
+
+        gap:15px;
+    }
+
+    .trade-card{
+
+        padding:20px;
+    }
+
+    .trade-symbol{
+
+        font-size:24px;
+    }
+
+    .trade-profit{
+
+        font-size:28px;
+    }
+
+    .trade-comment{
+
+        font-size:14px;
+    }
+
+}
+.history-search{
+
+    margin-top:20px;
+
+    margin-bottom:30px;
+}
+
+.search-box{
+
+    display:flex;
+
+    gap:12px;
+
+    align-items:center;
+}
+
+.search-box input{
+
+    flex:1;
+
+    height:55px;
+
+    background:#1e293b;
+
+    border:1px solid #334155;
+
+    border-radius:14px;
+
+    padding:0 20px;
+
+    color:white;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:0.3s;
+}
+
+.search-box input:focus{
+
+    border-color:#3b82f6;
+
+    box-shadow:
+    0 0 15px rgba(
+        59,
+        130,
+        246,
+        0.3
+    );
+}
+
+.search-box input::placeholder{
+
+    color:#94a3b8;
+}
+
+.search-box button{
+
+    height:55px;
+
+    padding:0 25px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    transition:0.3s;
+}
+
+.search-box button:hover{
+
+    background:#1d4ed8;
+
+    transform:translateY(-2px);
+}
+@media(max-width:768px){
+
+    .history-filters{
+
+        display:grid;
+
+        grid-template-columns:1fr 1fr;
+
+        gap:10px;
+    }
+
+    .history-filters a{
+
+        text-align:center;
+    }
+
+}
+.export-box{
+
+    margin-bottom:25px;
+}
+
+.export-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    background:#16a34a;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:14px 20px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.export-btn:hover{
+
+    transform:translateY(-2px);
+
+    background:#15803d;
+}
+@media(max-width:768px){
+
+    .export-btn{
+
+        width:100%;
+
+        justify-content:center;
+    }
+
+}
+.history-toolbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:35px;
+}
+
+.history-filters{
+
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+}
+
+.history-filters a{
+
+    text-decoration:none;
+
+    background:#1e293b;
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.history-filters a:hover{
+
+    background:#2563eb;
+}
+
+.export-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    background:#16a34a;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+    transition:0.3s;
+}
+
+.export-btn:hover{
+
+    background:#15803d;
+
+    transform:translateY(-2px);
+}
+@media(max-width:768px){
+
+    .history-toolbar{
+
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    .history-filters{
+
+        display:grid;
+
+        grid-template-columns:1fr 1fr;
+
+        gap:10px;
+    }
+
+    .history-filters a{
+
+        text-align:center;
+    }
+
+    .export-btn{
+
+        justify-content:center;
+
+        width:100%;
+    }
+
+}
+@media(max-width:768px){
+
+    .pagination{
+
+        gap:8px;
+    }
+
+    .page-btn,
+    .page-current{
+
+        padding:10px 14px;
+
+        font-size:14px;
+    }
+
+}
+
+</style>
+
+<div class="page-header">
+
+    <h1>
+        История сделок
+    </h1>
+
+    <p>
+        Все ваши сделки в одном месте
+    </p>
+    <div class="history-search">
+
+        <form method="GET">
+
+            <div class="search-box">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Поиск по активу..."
+                value="{{ search }}"
+            >
+
+                <button type="submit">
+
+                    <i class="bi bi-search"></i>
+
+                    Найти
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+<div class="history-toolbar">
+
+    <div class="history-filters">
+
+        <a href="{% url 'history' %}">
+            Все
+        </a>
+
+        <a href="?type=BUY">
+            BUY
+        </a>
+
+        <a href="?type=SELL">
+            SELL
+        </a>
+
+        <a href="?result=profit">
+            Прибыль
+        </a>
+
+        <a href="?result=loss">
+            Убыток
+        </a>
+
+    </div>
+
+    <a
+        href="{% url 'export_excel' %}"
+        class="export-btn"
+    >
+
+        <i class="bi bi-file-earmark-excel"></i>
+
+        Excel
+
+    </a>
+
+</div>
+</div>
+
+{% if trades %}
+
+<div class="history-grid">
+
+    {% for trade in trades %}
+
+    <div
+        class="trade-card"
+        onclick="window.location.href='{% url 'trade_detail' trade.id %}'"
+    >
+
+        <div class="trade-header">
+
+            <div class="trade-symbol">
+
+                {{ trade.symbol }}
+
+            </div>
+
+            <div class="trade-type {% if trade.trade_type == 'BUY' %}buy{% else %}sell{% endif %}">
+
+                {{ trade.trade_type }}
+
+            </div>
+
+        </div>
+
+        <div
+            class="trade-profit {% if trade.profit > 0 %}positive{% else %}negative{% endif %}"
+        >
+
+            ${{ trade.profit }}
+
+        </div>
+
+        <div class="trade-date">
+
+            {{ trade.date }}
+
+        </div>
+
+        <div class="trade-comment">
+
+            {{ trade.comment|truncatechars:35 }}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+<div class="pagination">
+
+    {% if trades.has_previous %}
+
+        <a
+            href="?page={{ trades.previous_page_number }}"
+            class="page-btn"
+        >
+
+            ← Назад
+
+        </a>
+
+    {% endif %}
+
+    {% for num in trades.paginator.page_range %}
+
+        {% if trades.number == num %}
+
+            <span class="page-current">
+
+                {{ num }}
+
+            </span>
+
+        {% else %}
+
+            <a
+                href="?page={{ num }}"
+                class="page-btn"
+            >
+
+                {{ num }}
+
+            </a>
+
+        {% endif %}
+
+    {% endfor %}
+
+    {% if trades.has_next %}
+
+        <a
+            href="?page={{ trades.next_page_number }}"
+            class="page-btn"
+        >
+
+            Вперёд →
+
+        </a>
+
+    {% endif %}
+
+</div>
+{% else %}
+
+<div class="empty-box">
+
+    Сделок пока нет
+
+</div>
+
+{% endif %}
+
+{% endblock %}

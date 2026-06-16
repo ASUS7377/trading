@@ -1,0 +1,512 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.todo-container{
+
+    max-width:1400px;
+
+    margin:0 auto;
+}
+
+.todo-header{
+
+    margin-bottom:35px;
+}
+
+.todo-header h1{
+
+    color:white;
+
+    font-size:42px;
+
+    margin-bottom:10px;
+}
+
+.todo-header p{
+
+    color:#94a3b8;
+}
+
+.todo-add-card{
+
+    background:#1e293b;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    margin-bottom:30px;
+}
+
+.todo-form{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr 1fr auto;
+
+    gap:15px;
+}
+
+.todo-form input,
+.todo-form select{
+
+    background:#0f172a;
+
+    border:none;
+
+    color:white;
+
+    padding:15px;
+
+    border-radius:12px;
+}
+
+.todo-form button{
+
+    background:#2563eb;
+
+    border:none;
+
+    color:white;
+
+    padding:15px 25px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.todo-section{
+
+    margin-bottom:40px;
+}
+
+.todo-section h2{
+
+    color:white;
+
+    margin-bottom:20px;
+}
+
+.tasks-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+
+    gap:20px;
+}
+
+.task-card{
+
+    background:#1e293b;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    border:1px solid rgba(255,255,255,0.05);
+
+    transition:.3s;
+}
+
+.task-card:hover{
+
+    transform:translateY(-5px);
+}
+
+.task-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+}
+
+.category{
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+.trading{
+
+    background:#16a34a;
+
+    color:white;
+}
+
+.study{
+
+    background:#2563eb;
+
+    color:white;
+}
+
+.sport{
+
+    background:#f97316;
+
+    color:white;
+}
+
+.personal{
+
+    background:#7c3aed;
+
+    color:white;
+}
+
+.deadline{
+
+    color:#94a3b8;
+
+    font-size:14px;
+}
+
+.task-title{
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+}
+
+.task-actions{
+
+    display:flex;
+
+    gap:10px;
+}
+
+.complete-btn{
+
+    flex:1;
+
+    text-align:center;
+
+    background:#22c55e;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    font-weight:700;
+}
+
+.delete-btn{
+
+    flex:1;
+
+    text-align:center;
+
+    background:#dc2626;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    font-weight:700;
+}
+
+.completed-card{
+
+    opacity:.65;
+}
+
+.completed-card .task-title{
+
+    text-decoration:line-through;
+}
+
+.empty-box{
+
+    background:#1e293b;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    color:#94a3b8;
+}
+
+@media(max-width:768px){
+
+    .todo-form{
+
+        grid-template-columns:1fr;
+    }
+
+    .todo-header h1{
+
+        font-size:34px;
+    }
+
+    .tasks-grid{
+
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+<div class="todo-container">
+
+    <div class="todo-header">
+
+        <h1>
+            🎯 План трейдера
+        </h1>
+
+        <p>
+            Управляйте своими задачами, дисциплиной и развитием
+        </p>
+
+    </div>
+
+    <div class="todo-add-card">
+
+        <form
+            method="POST"
+            action="{% url 'add_task' %}"
+            class="todo-form"
+        >
+
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Например: Сделать анализ XAUUSD"
+                required
+            >
+
+            <select name="category">
+
+                <option value="TRADING">
+                    📈 Трейдинг
+                </option>
+
+                <option value="STUDY">
+                    📚 Обучение
+                </option>
+
+                <option value="SPORT">
+                    🏃 Спорт
+                </option>
+
+                <option value="PERSONAL">
+                    👤 Личное
+                </option>
+
+            </select>
+
+            <input
+                type="date"
+                name="deadline"
+            >
+
+            <button type="submit">
+
+                Добавить
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="todo-section">
+
+        <h2>
+            🔥 Активные задачи
+        </h2>
+
+        <div class="tasks-grid">
+
+            {% for task in tasks %}
+
+                {% if not task.completed %}
+
+                <div class="task-card">
+
+                    <div class="task-top">
+
+                        <div class="category
+
+                        {% if task.category == 'TRADING' %}
+                            trading
+                        {% elif task.category == 'STUDY' %}
+                            study
+                        {% elif task.category == 'SPORT' %}
+                            sport
+                        {% else %}
+                            personal
+                        {% endif %}
+
+                        ">
+
+                            {{ task.get_category_display }}
+
+                        </div>
+
+                        {% if task.deadline %}
+
+                        <div class="deadline">
+
+                            {{ task.deadline }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="task-title">
+
+                        {{ task.title }}
+
+                    </div>
+
+                    <div class="task-actions">
+
+                        <a
+                            href="{% url 'toggle_task' task.id %}"
+                            class="complete-btn"
+                        >
+
+                            Выполнено
+
+                        </a>
+
+                        <a
+                            href="{% url 'delete_task' task.id %}"
+                            class="delete-btn"
+                        >
+
+                            Удалить
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% empty %}
+
+                <div class="empty-box">
+
+                    Пока нет задач
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <div class="todo-section">
+
+        <h2>
+            ✅ Выполненные задачи
+        </h2>
+
+        <div class="tasks-grid">
+
+            {% for task in tasks %}
+
+                {% if task.completed %}
+
+                <div class="task-card completed-card">
+
+                    <div class="task-top">
+
+                        <div class="category trading">
+
+                            Выполнено
+
+                        </div>
+
+                        {% if task.completed_at %}
+
+                        <div class="deadline">
+
+                            {{ task.completed_at|date:"d.m.Y" }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="task-title">
+
+                        {{ task.title }}
+
+                    </div>
+
+                    <div class="task-actions">
+
+                        <a
+                            href="{% url 'toggle_task' task.id %}"
+                            class="complete-btn"
+                        >
+
+                            Вернуть
+
+                        </a>
+
+                        <a
+                            href="{% url 'delete_task' task.id %}"
+                            class="delete-btn"
+                        >
+
+                            Удалить
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,614 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    @media (max-width: 768px){
+
+    .stats-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .chart-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .bottom-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .trade-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .chart-card,
+    .info-card,
+    .stat-card{
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .chart-header h2{
+        font-size:24px;
+    }
+
+    .chart-header span{
+        font-size:14px;
+    }
+
+    .stat-card .value{
+        font-size:40px;
+    }
+
+    .trade-box h3{
+        font-size:28px;
+    }
+
+    .trade-box .value{
+        font-size:36px;
+    }
+
+    canvas{
+        max-width:100%;
+        height:260px !important;
+    }
+
+}
+@media (max-width:768px){
+
+    .chart-card{
+        padding:20px;
+        text-align:center;
+    }
+
+    .chart-header{
+        text-align:left;
+        margin-bottom:15px;
+    }
+
+    .chart-header h2{
+        font-size:30px;
+    }
+
+    .chart-header span{
+        font-size:14px;
+    }
+
+    .chart-card canvas{
+        display:block;
+        margin:0 auto;
+        max-width:280px !important;
+        max-height:280px !important;
+    }
+
+    #resultChart,
+    #typeChart,
+    #assetsChart{
+        width:280px !important;
+        height:280px !important;
+        margin:0 auto;
+    }
+
+    #equityChart{
+        width:100% !important;
+        height:260px !important;
+    }
+
+}
+@media(max-width:768px){
+
+    #equityChart{
+        height:220px !important;
+    }
+
+    .chart-card{
+        padding:20px;
+    }
+
+}
+</style>
+<div class="page-header">
+
+    <h1>Статистика</h1>
+
+    <p>
+        Полная аналитика торгового журнала
+    </p>
+
+</div>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <h3>Текущий баланс</h3>
+
+        <div class="value">
+            ${{ current_balance|floatformat:2 }}
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h3>Общая прибыль</h3>
+
+        <div class="value positive">
+            ${{ total_profit|floatformat:2 }}
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h3>Всего сделок</h3>
+
+        <div class="value">
+            {{ total_trades }}
+        </div>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h3>Успешность
+</h3>
+
+        <div class="value">
+            {{ win_rate }}%
+        </div>
+
+    </div>
+
+</div>
+
+<div class="chart-grid">
+
+    <div class="chart-card">
+
+        <div class="chart-header">
+
+            <h2>Рост депозита</h2>
+
+            <span>
+                Динамика баланса
+            </span>
+
+        </div>
+
+        <canvas id="equityChart"></canvas>
+
+    </div>
+
+    <div class="chart-card">
+
+        <div class="chart-header">
+
+            <h2>Активы</h2>
+
+            <span>
+                Самые используемые инструменты
+            </span>
+
+        </div>
+
+        <canvas id="assetsChart"></canvas>
+
+    </div>
+
+</div>
+<div class="bottom-grid">
+
+    <div class="chart-card">
+
+        <div class="chart-header">
+
+            <h2>Прибыльные / Убыточные</h2>
+
+        </div>
+
+        <canvas id="resultChart"></canvas>
+
+    </div>
+
+    <div class="chart-card">
+
+        <div class="chart-header">
+
+            <h2>BUY / SELL</h2>
+
+        </div>
+
+        <canvas id="typeChart"></canvas>
+        
+
+    </div>
+
+</div>
+
+<div class="trade-grid">
+
+    <div class="info-card">
+
+        <h2>
+            Лучшая сделка
+        </h2>
+
+        {% if best_trade %}
+
+        <div class="trade-box">
+
+            <h3>
+                {{ best_trade.symbol }}
+            </h3>
+
+            <p>
+                {{ best_trade.trade_type }}
+            </p>
+
+            <div class="value positive">
+                ${{ best_trade.profit|floatformat:2 }}
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <p class="empty-text">
+            Пока нет данных
+        </p>
+
+        {% endif %}
+
+    </div>
+
+    <div class="info-card">
+
+        <h2>
+            Худшая сделка
+        </h2>
+
+        {% if worst_trade %}
+
+        <div class="trade-box">
+
+            <h3>
+                {{ worst_trade.symbol }}
+            </h3>
+
+            <p>
+                {{ worst_trade.trade_type }}
+            </p>
+
+            <div class="value negative">
+                ${{ worst_trade.profit|floatformat:2 }}
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <p class="empty-text">
+            Пока нет данных
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+const equityChart =
+document.getElementById(
+'equityChart'
+);
+
+new Chart(
+equityChart,
+{
+    type:'line',
+
+    data:{
+
+        labels:[
+            'Старт',
+            'Текущий баланс'
+        ],
+
+        datasets:[{
+
+            label:'Баланс',
+
+            data:[
+                {{ profile.initial_balance }},
+                {{ current_balance }}
+            ],
+
+            borderWidth:4,
+
+            tension:0.4,
+
+            fill:true
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        plugins:{
+
+            legend:{
+
+                position:'bottom',
+
+                labels:{
+
+                    color:'white',
+
+                    boxWidth:12,
+
+                    padding:15
+
+                }
+
+            }
+
+        },
+
+        scales:{
+
+            x:{
+
+                ticks:{
+                    color:'white'
+                }
+
+            },
+
+            y:{
+
+                ticks:{
+                    color:'white'
+                }
+
+            }
+
+        }
+
+    }
+
+}
+);
+
+
+
+const resultChart =
+document.getElementById(
+'resultChart'
+);
+
+new Chart(
+resultChart,
+{
+
+    type:'doughnut',
+
+    data:{
+
+        labels:[
+            'Прибыльные',
+            'Убыточные'
+        ],
+
+        datasets:[{
+
+            data:[
+                {{ winning_trades }},
+                {{ losing_trades }}
+            ],
+
+            backgroundColor:[
+                '#22c55e',
+                '#ef4444'
+            ]
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        cutout:'60%',
+
+        radius:'85%',
+
+        plugins:{
+
+            legend:{
+
+                position:'bottom',
+
+                labels:{
+
+                    color:'white',
+
+                    boxWidth:12,
+
+                    padding:15
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+);
+
+
+
+const typeChart =
+document.getElementById(
+'typeChart'
+);
+
+new Chart(
+typeChart,
+{
+
+    type:'doughnut',
+
+    data:{
+
+        labels:[
+            'BUY',
+            'SELL'
+        ],
+
+        datasets:[{
+
+            data:[
+                {{ buy_count }},
+                {{ sell_count }}
+            ],
+
+            backgroundColor:[
+                '#3b82f6',
+                '#f97316'
+            ]
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        cutout:'60%',
+
+        radius:'85%',
+
+        plugins:{
+
+            legend:{
+
+                position:'bottom',
+
+                labels:{
+
+                    color:'white',
+
+                    boxWidth:12,
+
+                    padding:15
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+);
+
+
+
+const assetsChart =
+document.getElementById(
+'assetsChart'
+);
+
+new Chart(
+assetsChart,
+{
+
+    type:'doughnut',
+
+    data:{
+
+        labels:
+        {{ asset_labels|safe }},
+
+        datasets:[{
+
+            data:
+            {{ asset_counts|safe }},
+
+            backgroundColor:[
+
+                '#3b82f6',
+                '#22c55e',
+                '#f97316',
+                '#ef4444',
+                '#8b5cf6',
+                '#06b6d4',
+                '#eab308',
+                '#ec4899'
+
+            ]
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        cutout:'60%',
+
+        radius:'85%',
+
+        plugins:{
+
+            legend:{
+
+                position:'bottom',
+
+                labels:{
+
+                    color:'white',
+
+                    boxWidth:12,
+
+                    padding:15
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+);
+
+</script>
+
+{% endblock %}

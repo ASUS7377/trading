@@ -1,0 +1,93 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.delete-card{
+
+    max-width:700px;
+
+    margin:50px auto;
+
+    background:#1e293b;
+
+    padding:40px;
+
+    border-radius:24px;
+
+    text-align:center;
+}
+
+.delete-btn{
+
+    background:#dc2626;
+
+    color:white;
+
+    border:none;
+
+    padding:16px 30px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+}
+
+.cancel-btn{
+
+    background:#334155;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:16px 30px;
+
+    border-radius:12px;
+
+    margin-right:10px;
+}
+
+</style>
+
+<div class="delete-card">
+
+    <h1>
+        Удалить пользователя?
+    </h1>
+
+    <p>
+
+        {{ selected_user.username }}
+
+    </p>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <a
+            href="{% url 'user_detail' selected_user.id %}"
+            class="cancel-btn"
+        >
+
+            Отмена
+
+        </a>
+
+        <button
+            type="submit"
+            class="delete-btn"
+        >
+
+            Удалить
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

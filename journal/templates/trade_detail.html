@@ -1,0 +1,252 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.detail-page{
+    max-width:1400px;
+    margin:auto;
+}
+
+.detail-header{
+    margin-bottom:30px;
+}
+
+.detail-header h1{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.detail-header p{
+    color:#94a3b8;
+}
+
+.detail-card{
+    background:#1e293b;
+    border-radius:30px;
+    padding:40px;
+}
+
+.detail-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.info-box{
+    background:#0f172a;
+    border-radius:20px;
+    padding:25px;
+}
+
+.info-box span{
+    color:#94a3b8;
+    display:block;
+    margin-bottom:12px;
+}
+
+.info-box h3{
+    font-size:32px;
+}
+
+.profit{
+    color:#22c55e;
+}
+
+.loss{
+    color:#ef4444;
+}
+
+.comment-box{
+    margin-top:25px;
+    background:#0f172a;
+    padding:25px;
+    border-radius:20px;
+}
+
+.comment-box h2{
+    margin-bottom:15px;
+}
+
+.image-box{
+    margin-top:25px;
+}
+
+.image-box img{
+    width:100%;
+    border-radius:25px;
+    display:block;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:25px;
+    padding:15px 25px;
+    background:#2563eb;
+    color:white;
+    border-radius:15px;
+}
+
+.back-btn:hover{
+    background:#1d4ed8;
+}
+
+@media(max-width:900px){
+
+    .detail-grid{
+        grid-template-columns:1fr;
+    }
+
+    .detail-header h1{
+        font-size:32px;
+    }
+
+}
+
+</style>
+
+<div class="detail-page">
+
+    <div class="detail-header">
+
+        <h1>
+            Детали сделки
+        </h1>
+
+        <p>
+            Полная информация по сделке
+        </p>
+
+    </div>
+
+    <div class="detail-card">
+
+        <div class="detail-grid">
+
+            <div class="info-box">
+
+                <span>Дата</span>
+
+                <h3>
+                    {{ trade.date }}
+                </h3>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>Актив</span>
+
+                <h3>
+                    {{ trade.symbol }}
+                </h3>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>Тип сделки</span>
+
+                <h3>
+                    {{ trade.trade_type }}
+                </h3>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>Лот</span>
+
+                <h3>
+                    {{ trade.lot_size }}
+                </h3>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>Цена входа</span>
+
+                <h3>
+                    {{ trade.entry_price }}
+                </h3>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>Цена выхода</span>
+
+                <h3>
+                    {{ trade.exit_price|floatformat:2 }}
+                </h3>
+
+            </div>
+
+            <div class="info-box">
+
+                <span>Результат</span>
+
+                <h3 class="{% if trade.profit > 0 %}profit{% else %}loss{% endif %}">
+
+                    ${{ trade.profit|floatformat:2 }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="comment-box">
+
+            <h2>
+                Комментарий
+            </h2>
+
+            <p>
+                {{ trade.comment }}
+            </p>
+
+        </div>
+
+        {% if trade.screenshot %}
+
+        <div class="image-box">
+
+            <img src="{{ trade.screenshot.url }}">
+
+        </div>
+
+        {% endif %}
+        <a href="{% url 'edit_trade' trade.pk %}" class="back-btn">
+
+            ✏️ Редактировать
+
+        </a>
+        <a
+    href="{% url 'delete_trade' trade.pk %}"
+    class="back-btn"
+    style="
+        background:#dc2626;
+        margin-left:10px;
+    "
+>
+
+    🗑️ Удалить
+
+</a>
+        <a
+            href="{% url 'history' %}"
+            class="back-btn">
+
+            ← Назад к истории
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

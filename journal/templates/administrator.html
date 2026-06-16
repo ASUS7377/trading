@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Admin Panel
+    </title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Segoe UI,sans-serif;
+        }
+
+        body{
+            background:#020817;
+            color:white;
+            padding:40px;
+        }
+
+        .container{
+            max-width:1400px;
+            margin:auto;
+        }
+
+        .header{
+            margin-bottom:40px;
+        }
+
+        .header h1{
+            font-size:48px;
+            margin-bottom:10px;
+        }
+
+        .header p{
+            color:#94a3b8;
+        }
+
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:20px;
+            margin-bottom:40px;
+        }
+
+        .card{
+            background:#1e293b;
+            border-radius:20px;
+            padding:30px;
+        }
+
+        .card h3{
+            color:#94a3b8;
+            margin-bottom:15px;
+        }
+
+        .card .value{
+            font-size:42px;
+            font-weight:700;
+        }
+
+        .green{
+            color:#22c55e;
+        }
+
+        .red{
+            color:#ef4444;
+        }
+
+        .actions{
+            margin-bottom:35px;
+        }
+
+        .create-btn{
+
+            background:#2563eb;
+            color:white;
+
+            padding:16px 30px;
+
+            border-radius:15px;
+
+            text-decoration:none;
+
+            font-weight:700;
+        }
+
+        .users-box{
+
+            background:#1e293b;
+
+            border-radius:20px;
+
+            padding:30px;
+        }
+
+        .users-box h2{
+            margin-bottom:25px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            text-align:left;
+            color:#94a3b8;
+            padding:15px;
+            border-bottom:1px solid #334155;
+        }
+
+        td{
+            padding:18px 15px;
+            border-bottom:1px solid #334155;
+        }
+
+        tr:hover{
+            background:#273449;
+        }
+
+        .user-link{
+            color:white;
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        .user-link:hover{
+            color:#60a5fa;
+        }
+
+
+        .create-user-btn{
+
+    display:inline-block;
+
+    background:#22c55e;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:16px 28px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+    font-size:16px;
+
+    transition:0.3s;
+}
+
+.create-user-btn:hover{
+
+    transform:translateY(-2px);
+}
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>
+            ADMIN PANEL
+        </h1>
+
+        <p>
+            Управление пользователями
+        </p>
+
+        <div style="margin-top:20px;">
+
+            <a
+                href="{% url 'logout' %}"
+                style="
+                    background:#dc2626;
+                    color:white;
+                    padding:14px 24px;
+                    border-radius:12px;
+                    text-decoration:none;
+                    font-weight:700;
+                "
+            >
+
+                Выйти
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="stats">
+
+        <div class="card">
+
+            <h3>
+                Всего пользователей
+            </h3>
+
+            <div class="value">
+                {{ total_users }}
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Активных
+            </h3>
+
+            <div class="value green">
+                {{ active_users }}
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Заблокировано
+            </h3>
+
+            <div class="value red">
+                {{ blocked_users }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+        <a
+            href="{% url 'create_user' %}"
+            class="create-user-btn"
+        >
+
+            + Создать пользователя
+
+        </a>
+
+    </div>
+
+    <div class="users-box">
+
+        <h2>
+            Пользователи
+        </h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Логин
+                    </th>
+
+                    <th>
+                        Имя
+                    </th>
+
+                    <th>
+                        Статус
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for user in users %}
+
+                <tr>
+
+                    <td>
+
+                        <a
+                            href="{% url 'user_detail' user.id %}"
+                            class="user-link"
+                        >
+
+                            {{ user.username }}
+
+                        </a>
+
+                    </td>
+
+                    <td>
+
+                        {{ user.first_name }}
+                        {{ user.last_name }}
+
+                    </td>
+
+                    <td>
+
+                        {% if user.is_active %}
+
+                            <span class="green">
+
+                                Активен
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="red">
+
+                                Заблокирован
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="3">
+
+                        Пользователей пока нет
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+
+</html>

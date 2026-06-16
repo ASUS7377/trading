@@ -1,0 +1,758 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.profile-wrapper{
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+
+.profile-card{
+    background:linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b
+    );
+
+    border-radius:30px;
+
+    padding:50px;
+    width:100%;
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.4);
+}
+
+.profile-header{
+    display:flex;
+    align-items:center;
+    gap:35px;
+    margin-bottom:40px;
+}
+
+.profile-avatar{
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid rgba(255,255,255,.1);
+}
+
+.avatar-placeholder{
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:70px;
+    background:#020617;
+}
+
+.profile-header h1{
+    font-size:54px;
+    color:white;
+    margin-bottom:10px;
+}
+
+.profile-date{
+    color:#94a3b8;
+    font-size:18px;
+}
+
+.profile-stats,
+.profile-analytics{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.profile-box{
+    background:#111827;
+    border-radius:22px;
+    padding:30px;
+    transition:.3s;
+}
+
+.profile-box:hover{
+    transform:translateY(-5px);
+}
+
+.profile-box span{
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.profile-box h2{
+    margin-top:15px;
+    font-size:34px;
+    color:white;
+}
+
+.green{
+    color:#22c55e !important;
+}
+
+.orange{
+    color:#f59e0b !important;
+}
+
+.profile-analytics{
+    margin-top:10px;
+}.goal-progress{
+    margin-top:35px;
+}
+
+.goal-title{
+    margin-bottom:12px;
+    font-size:18px;
+    font-weight:600;
+}
+
+.progress-bar{
+    width:100%;
+    height:18px;
+    background:#0f172a;
+    border-radius:50px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    border-radius:50px;
+
+    background:linear-gradient(
+        90deg,
+        #22c55e,
+        #3b82f6
+    );
+}
+@media(max-width:1200px){
+
+.profile-stats,
+.profile-analytics{
+    grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:768px){
+
+.profile-header{
+    flex-direction:column;
+    text-align:center;
+}
+
+.profile-stats,
+.profile-analytics{
+    grid-template-columns:1fr;
+}
+
+}
+
+.trader-rank{
+
+    display:inline-block;
+
+    margin-top:12px;
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-weight:700;
+}
+
+.trader-title{
+
+    margin-top:10px;
+
+    color:#94a3b8;
+
+    font-size:15px;
+}
+
+.goal-success{
+
+    margin-top:25px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #16a34a,
+    #22c55e
+    );
+
+    padding:25px;
+
+    border-radius:20px;
+
+    color:white;
+}
+
+.goal-success h2{
+
+    margin-bottom:10px;
+}
+
+@media(max-width:768px){
+
+    .profile-header{
+
+        flex-direction:column;
+
+        text-align:center;
+    }
+
+    .profile-avatar{
+
+        width:120px;
+
+        height:120px;
+
+        margin-bottom:20px;
+    }
+
+    .avatar-placeholder{
+
+        margin:0 auto 20px auto;
+    }
+
+    .profile-stats{
+
+        display:grid;
+
+        grid-template-columns:1fr;
+
+        gap:15px;
+    }
+
+    .profile-analytics{
+
+        display:grid;
+
+        grid-template-columns:1fr;
+
+        gap:15px;
+    }
+
+    .profile-box{
+
+        text-align:center;
+    }
+
+    .profile-box h2{
+
+        font-size:28px;
+    }
+
+    .goal-title{
+
+        text-align:center;
+
+        font-size:16px;
+    }
+
+}
+
+</style>
+
+<style>
+
+.new-goal-btn{
+
+    margin-top:15px;
+
+    background:white;
+
+    color:#16a34a;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.new-goal-btn:hover{
+
+    transform:translateY(-2px);
+}
+
+.goal-modal{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(
+        0,
+        0,
+        0,
+        .75
+    );
+
+    z-index:9999;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+.goal-modal-content{
+
+    width:90%;
+
+    max-width:500px;
+
+    background:#1e293b;
+
+    border-radius:24px;
+
+    padding:35px;
+
+    text-align:center;
+}
+
+.goal-modal-content h2{
+
+    color:white;
+
+    margin-bottom:10px;
+}
+
+.goal-modal-content p{
+
+    color:#94a3b8;
+
+    margin-bottom:25px;
+}
+
+.goal-input{
+
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#0f172a;
+
+    color:white;
+
+    font-size:18px;
+
+    margin-bottom:20px;
+}
+
+.goal-save-btn{
+
+    width:100%;
+
+    background:#16a34a;
+
+    color:white;
+
+    border:none;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.goal-save-btn:hover{
+
+    opacity:.9;
+}
+
+@media(max-width:768px){
+
+    .goal-modal-content{
+
+        padding:25px;
+    }
+
+    .goal-input{
+
+        font-size:16px;
+    }
+
+    .goal-save-btn{
+
+        font-size:16px;
+    }
+
+}
+
+</style>
+<div class="profile-wrapper">
+
+
+
+<div class="profile-card">
+
+    <div class="profile-header">
+
+        {% if profile.avatar %}
+
+            <img
+                src="{{ profile.avatar.url }}"
+                class="profile-avatar"
+            >
+
+        {% else %}
+
+            <div class="avatar-placeholder">
+
+                👤
+
+            </div>
+
+        {% endif %}
+
+        <div>
+
+            <h1>
+
+                {{ profile.full_name }}
+
+            </h1>
+
+            <p class="profile-date">
+
+                Пользователь Trading Journal
+
+            </p>
+
+            <div class="trader-rank" style="background:{{ trader_color }};">
+
+                <i class="bi {{ trader_icon }}"></i>
+
+                Уровень {{ trader_level }}
+
+            </div>
+
+
+            <div class="trader-title">
+
+                {{ trader_title }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="profile-stats">
+
+        <div class="profile-box">
+
+            <span>
+
+                Начальный депозит
+
+            </span>
+
+            <h2>
+
+                ${{ profile.initial_balance|floatformat:2 }}
+
+            </h2>
+
+        </div>
+
+        <div class="profile-box">
+
+            <span>
+
+                Текущий баланс
+
+            </span>
+
+            <h2 class="green">
+
+                ${{ current_balance|floatformat:2 }}
+
+            </h2>
+
+        </div>
+
+        <div class="profile-box">
+
+            <span>
+
+                Цель
+
+            </span>
+
+            <h2>
+
+                ${{ profile.target_balance|floatformat:2 }}
+
+            </h2>
+
+        </div>
+
+        <div class="profile-box">
+
+            {% if goal_completed %}
+
+                <span>
+
+                    Цель достигнута
+
+                </span>
+
+                <h2 class="green">
+
+                    +${{ remaining_goal|floatformat:2 }}
+
+                </h2>
+
+            {% else %}
+
+                <span>
+
+                    Осталось до цели
+
+                </span>
+
+                <h2 class="orange">
+
+                    ${{ remaining_goal|floatformat:2 }}
+
+                </h2>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <div class="goal-progress">
+
+        <div class="goal-title">
+
+            {% if goal_completed %}
+
+                🎉 Финансовая цель достигнута!
+
+            {% else %}
+
+                До финансовой цели:
+                {{ goal_percent }}%
+
+            {% endif %}
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div
+                class="progress-fill"
+                style="width: {{ goal_percent }}%;"
+            ></div>
+
+        </div>
+
+    </div>
+
+    {% if goal_completed %}
+
+    <div class="goal-success">
+
+        <h2>
+
+            🎉 Поздравляем!
+
+        </h2>
+
+        <p>
+
+            Вы достигли своей финансовой цели.
+
+            Самое время поставить новую,
+            более амбициозную цель и двигаться дальше.
+
+        </p>
+        <button class="new-goal-btn"onclick="openGoalModal()">
+
+            Установить новую цель
+
+        </button>
+    </div>
+
+    {% endif %}
+
+</div>
+
+<div class="profile-analytics">
+
+    <div class="profile-box">
+
+        <span>
+
+            Всего сделок
+
+        </span>
+
+        <h2>
+
+            {{ total_trades }}
+
+        </h2>
+
+    </div>
+
+    <div class="profile-box">
+
+        <span>
+
+            Успешность
+
+
+        </span>
+
+        <h2 class="green">
+
+            {{ win_rate }}%
+
+        </h2>
+
+    </div>
+
+    <div class="profile-box">
+
+        <span>
+
+            Общая прибыль
+
+        </span>
+
+        <h2 class="green">
+
+            ${{ total_profit|floatformat:2 }}
+
+        </h2>
+
+    </div>
+
+    <div class="profile-box">
+
+        <span>
+
+            Лучший актив
+
+        </span>
+
+        <h2>
+
+            {{ favorite_symbol }}
+
+        </h2>
+
+    </div>
+
+</div>
+
+
+</div>
+<div id="goalModal" class="goal-modal">
+
+    <div class="goal-modal-content">
+
+        <h2>
+
+            🎯 Новая финансовая цель
+
+        </h2>
+
+        <p>
+
+            Укажите новую сумму, которую хотите достичь.
+
+        </p>
+
+        <form
+            method="post"
+            action="{% url 'update_goal' %}"
+        >
+
+            {% csrf_token %}
+
+            <input
+                type="number"
+                name="target_balance"
+                placeholder="Например: 5000"
+                required
+                class="goal-input"
+            >
+
+            <button
+                type="submit"
+                class="goal-save-btn"
+            >
+
+                Сохранить цель
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+function openGoalModal(){
+
+    document.getElementById(
+        'goalModal'
+    ).style.display='flex';
+}
+
+window.onclick=function(event){
+
+    const modal=
+    document.getElementById(
+        'goalModal'
+    );
+
+    if(event.target===modal){
+
+        modal.style.display='none';
+    }
+
+}
+
+</script>
+{% endblock %}

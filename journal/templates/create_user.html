@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+Создать пользователя
+</title>
+
+<style>
+
+body{
+    background:#020817;
+    color:white;
+    font-family:Segoe UI;
+}
+
+.container{
+
+    width:700px;
+
+    margin:60px auto;
+
+    background:#1e293b;
+
+    padding:40px;
+
+    border-radius:20px;
+}
+
+h1{
+    margin-bottom:30px;
+}
+
+input{
+
+    width:100%;
+
+    padding:16px;
+
+    margin-bottom:20px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#0f172a;
+
+    color:white;
+}
+
+button{
+
+    width:100%;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+button:hover{
+
+    background:#1d4ed8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>
+        Создать пользователя
+    </h1>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <input
+            type="text"
+            name="first_name"
+            placeholder="Имя"
+            required
+        >
+
+        <input
+            type="text"
+            name="last_name"
+            placeholder="Фамилия"
+            required
+        >
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Логин"
+            required
+        >
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Пароль"
+            required
+        >
+
+        
+
+        <button>
+
+            Создать пользователя
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.edit-card{
+
+    max-width:900px;
+
+    margin:0 auto;
+
+    background:#1e293b;
+
+    border-radius:24px;
+
+    padding:40px;
+}
+
+.edit-card h1{
+
+    color:white;
+
+    margin-bottom:30px;
+}
+
+.form-group{
+
+    margin-bottom:20px;
+}
+
+.form-group label{
+
+    display:block;
+
+    color:white;
+
+    margin-bottom:10px;
+
+    font-weight:600;
+}
+
+.form-group input{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#0f172a;
+
+    color:white;
+
+    font-size:16px;
+}
+
+.checkbox-box{
+
+    margin-top:20px;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.checkbox-box input{
+
+    width:20px;
+
+    height:20px;
+}
+
+.buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:30px;
+}
+
+.save-btn{
+
+    flex:1;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.cancel-btn{
+
+    flex:1;
+
+    background:#334155;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    text-align:center;
+
+    font-weight:700;
+}
+
+@media(max-width:768px){
+
+    .edit-card{
+
+        padding:20px;
+    }
+
+    .buttons{
+
+        flex-direction:column;
+    }
+
+}
+
+</style>
+
+<div class="edit-card">
+
+    <h1>
+        Редактировать пользователя
+    </h1>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+
+            <label>
+                Логин
+            </label>
+
+            <input
+                type="text"
+                name="username"
+                value="{{ selected_user.username }}"
+                required
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Имя
+            </label>
+
+            <input
+                type="text"
+                name="first_name"
+                value="{{ selected_user.first_name }}"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Фамилия
+            </label>
+
+            <input
+                type="text"
+                name="last_name"
+                value="{{ selected_user.last_name }}"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Новый пароль
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Оставьте пустым если не менять"
+            >
+
+        </div>
+
+        <div class="checkbox-box">
+
+            <input
+                type="checkbox"
+                name="is_active"
+                {% if selected_user.is_active %}
+                checked
+                {% endif %}
+            >
+
+            <label>
+                Пользователь активен
+            </label>
+
+        </div>
+
+        <div class="buttons">
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+
+                Сохранить
+
+            </button>
+
+            <a
+                href="{% url 'user_detail' selected_user.id %}"
+                class="cancel-btn"
+            >
+
+                Отмена
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

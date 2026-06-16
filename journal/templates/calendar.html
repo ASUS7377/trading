@@ -1,0 +1,529 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.calendar-navigation{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+}
+
+.calendar-month{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    color:white;
+}
+
+.month-arrow{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:14px;
+
+    background:#0f172a;
+
+    color:white;
+
+    text-decoration:none;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:24px;
+
+    transition:0.3s;
+}
+
+.month-arrow:hover{
+
+    background:#2563eb;
+}
+
+.calendar-scroll{
+
+    overflow-x:auto;
+}
+
+.trade-cards{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(260px,1fr)
+    );
+
+    gap:20px;
+
+    margin-top:25px;
+}
+
+.trade-card-modern{
+
+    background:#0f172a;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    transition:0.3s;
+}
+
+.trade-card-modern:hover{
+
+    transform:translateY(-5px);
+}
+
+.trade-card-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+}
+
+.trade-symbol{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:white;
+}
+
+.buy-tag{
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:10px;
+}
+
+.sell-tag{
+
+    background:#dc2626;
+
+    color:white;
+
+    padding:8px 14px;
+
+    border-radius:10px;
+}
+
+.trade-profit-modern{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+}
+
+.trade-date-modern{
+
+    color:#94a3b8;
+}
+
+@media(max-width:768px){
+
+    .month-stats{
+
+        display:grid;
+
+        grid-template-columns:1fr;
+
+        gap:15px;
+    }
+
+    .calendar-month{
+
+        font-size:24px;
+    }
+
+    .month-arrow{
+
+        width:45px;
+
+        height:45px;
+    }
+
+    .calendar-scroll{
+
+        overflow-x:auto;
+    }
+
+    .calendar-card{
+
+        min-width:850px;
+    }
+
+    .trade-cards{
+
+        grid-template-columns:1fr;
+    }
+
+    .banner-overlay h1{
+
+        font-size:34px;
+    }
+
+    .banner-overlay p{
+
+        font-size:15px;
+    }
+
+    .affirmation-card h2{
+
+        font-size:24px;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .calendar-navigation{
+
+        gap:15px;
+    }
+
+    .calendar-month{
+
+        font-size:18px;
+    }
+
+    .month-arrow{
+
+        width:40px;
+        height:40px;
+    }
+
+    .calendar-card{
+
+        overflow:hidden;
+        min-width:unset;
+    }
+
+    .calendar-week{
+
+        display:grid;
+
+        grid-template-columns:
+        repeat(7,1fr);
+
+        gap:6px;
+    }
+
+    .day-cell{
+
+        min-height:80px;
+
+        padding:8px;
+    }
+
+    .day-number{
+
+        font-size:16px;
+    }
+
+    .day-result{
+
+        font-size:12px;
+    }
+
+    .day-percent{
+
+        font-size:10px;
+    }
+
+}
+.calendar-scroll::-webkit-scrollbar{
+
+    display:none;
+}
+
+.calendar-scroll{
+
+    -ms-overflow-style:none;
+
+    scrollbar-width:none;
+}
+</style>
+
+<div class="calendar-page">
+
+    <div class="calendar-banner">
+
+        <div class="banner-overlay">
+
+            <h1>
+                Календарь трейдера
+            </h1>
+
+            <p>
+                Сегодняшняя дисциплина — завтрашняя прибыль
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="affirmation-card">
+
+        <span>
+            Аффирмация дня
+        </span>
+
+        <h2>
+
+            "{{ affirmation }}"
+
+        </h2>
+
+    </div>
+
+    <div class="month-stats">
+
+        <div class="month-card">
+
+            <h3>
+                Общая прибыль
+            </h3>
+
+            <div class="value positive">
+
+                ${{ total_profit }}
+
+            </div>
+
+        </div>
+
+        <div class="month-card">
+
+            <h3>
+                Сделок
+            </h3>
+
+            <div class="value">
+
+                {{ total_trades }}
+
+            </div>
+
+        </div>
+
+        <div class="month-card">
+
+            <h3>
+                Успешность
+            </h3>
+
+            <div class="value">
+
+                {{ win_rate }}%
+
+            </div>
+
+        </div>
+
+        <div class="month-card">
+
+            <h3>
+                Торговых дней
+            </h3>
+
+            <div class="value">
+
+                {{ total_trades }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="calendar-card">
+
+        <div class="calendar-navigation">
+
+            <a
+                href="?month={{ prev_month }}&year={{ prev_year }}"
+                class="month-arrow"
+            >
+
+                ←
+
+            </a>
+
+            <div class="calendar-month">
+
+                {{ month }}/{{ year }}
+
+            </div>
+
+            <a
+                href="?month={{ next_month }}&year={{ next_year }}"
+                class="month-arrow"
+            >
+
+                →
+
+            </a>
+
+        </div>
+
+        <div class="calendar-scroll">
+
+            {% for week in calendar_days %}
+
+            <div class="calendar-week">
+
+                {% for day in week %}
+
+                    {% if day %}
+
+                        <div class="day-cell
+
+                        {% if day.profit > 0 %}
+                            profit-day
+                        {% elif day.profit < 0 %}
+                            loss-day
+                        {% endif %}
+
+                        ">
+
+                            <div class="day-number">
+
+                                {{ day.day }}
+
+                            </div>
+
+                            {% if day.profit != 0 %}
+
+                                <div class="day-result">
+
+                                    {{ day.profit }}$
+
+                                </div>
+
+                                <div class="day-percent">
+
+                                    {{ day.percent }}%
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="empty-day"></div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <div class="trade-list-card">
+
+        <h2>
+
+            Последние сделки
+
+        </h2>
+
+        <div class="trade-cards">
+
+            {% for trade in trades|slice:":8" %}
+
+            <div class="trade-card-modern">
+
+                <div class="trade-card-top">
+
+                    <div class="trade-symbol">
+
+                        {{ trade.symbol }}
+
+                    </div>
+
+                    {% if trade.trade_type == 'BUY' %}
+
+                        <div class="buy-tag">
+
+                            BUY
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="sell-tag">
+
+                            SELL
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="trade-profit-modern {% if trade.profit > 0 %}positive{% else %}negative{% endif %}">
+
+                    ${{ trade.profit }}
+
+                </div>
+
+                <div class="trade-date-modern">
+
+                    {{ trade.date }}
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="trade-card-modern">
+
+                Сделок пока нет
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
