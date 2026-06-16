@@ -13,7 +13,7 @@ SECRET_KEY = "django-insecure-656+-(ybb9fyy)ym@lnxlim4jsxqovo-p5*ef$tm#!b088ja8a
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
 
@@ -50,6 +50,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
 
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
 
@@ -167,7 +169,7 @@ STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
 
-    BASE_DIR / "static",
+    BASE_DIR / "journal" / "static",
 
 ]
 
@@ -176,3 +178,9 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_STORAGE = (
+    'whitenoise.storage.CompressedManifestStaticFilesStorage'
+)
