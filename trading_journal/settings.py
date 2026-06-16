@@ -15,6 +15,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+
+    'https://trading-journal-tezj.onrender.com',
+
+]
+
 INSTALLED_APPS = [
 
     "django.contrib.admin",
