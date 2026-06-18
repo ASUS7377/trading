@@ -93,6 +93,75 @@
     background:#1d4ed8;
 }
 
+.result-tp{
+    color:#22c55e;
+    font-weight:700;
+}
+
+.result-sl{
+    color:#ef4444;
+    font-weight:700;
+}
+
+.result-manual{
+    color:#9ca3af;
+    font-weight:700;
+}
+
+.detail-actions{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:30px;
+}
+
+.edit-btn,
+.delete-btn,
+.back-btn{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    min-width:180px;
+    height:60px;
+
+    text-decoration:none;
+    border-radius:14px;
+    font-size:16px;
+    font-weight:700;
+
+    transition:0.3s;
+}
+
+.edit-btn{
+    background:#2563eb;
+    color:#fff;
+}
+
+.edit-btn:hover{
+    transform:translateY(-2px);
+}
+
+.delete-btn{
+    background:#dc2626;
+    color:#fff;
+}
+
+.delete-btn:hover{
+    transform:translateY(-2px);
+}
+
+.back-btn{
+    background:#1f2937;
+    color:#fff;
+}
+
+.back-btn:hover{
+    transform:translateY(-2px);
+}
+
 @media(max-width:900px){
 
     .detail-grid{
@@ -106,147 +175,307 @@
 }
 
 </style>
-
 <div class="detail-page">
 
-    <div class="detail-header">
+<div class="detail-header">
 
-        <h1>
-            Детали сделки
-        </h1>
+    <h1>
+        Детали сделки
+    </h1>
+
+    <p>
+        Полная информация по сделке
+    </p>
+
+</div>
+
+<div class="detail-card">
+
+    <div class="detail-grid">
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-calendar-event"></i>
+
+                Дата
+
+            </span>
+
+            <h3>
+
+                {{ trade.date }}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-graph-up"></i>
+
+                Актив
+
+            </span>
+
+            <h3>
+
+                {{ trade.symbol }}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-arrow-left-right"></i>
+
+                Тип сделки
+
+            </span>
+
+            <h3>
+
+                {{ trade.trade_type }}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-layers"></i>
+
+                Лот
+
+            </span>
+
+            <h3>
+
+                {{ trade.lot_size }}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-box-arrow-in-right"></i>
+
+                Цена входа
+
+            </span>
+
+            <h3>
+
+                {{ trade.entry_price }}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                Цена выхода
+
+            </span>
+
+            <h3>
+
+                {{ trade.exit_price|floatformat:5 }}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-bullseye"></i>
+
+                Take Profit
+
+            </span>
+
+            <h3>
+
+                {{ trade.take_profit|default:"-" }}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-shield-x"></i>
+
+                Stop Loss
+
+            </span>
+
+            <h3>
+
+                {{ trade.stop_loss|default:"-" }}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-flag"></i>
+
+                Результат сделки
+
+            </span>
+
+            <h3>
+
+                {% if trade.trade_result == 'TP' %}
+
+                    <span class="result-tp">
+
+                        <i class="bi bi-bullseye"></i>
+
+                        TP
+
+                    </span>
+
+                {% elif trade.trade_result == 'SL' %}
+
+                    <span class="result-sl">
+
+                        <i class="bi bi-shield-x"></i>
+
+                        SL
+
+                    </span>
+
+                {% else %}
+
+                    <span class="result-manual">
+
+                        <i class="bi bi-hand-index-thumb"></i>
+
+                        MANUAL
+
+                    </span>
+
+                {% endif %}
+
+            </h3>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+
+                <i class="bi bi-currency-dollar"></i>
+
+                Финальный результат
+
+            </span>
+
+            <h3 class="{% if trade.profit > 0 %}profit{% else %}loss{% endif %}">
+
+                ${{ trade.profit|floatformat:2 }}
+
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="comment-box">
+
+        <h2>
+
+            <i class="bi bi-chat-left-text"></i>
+
+            Комментарий
+
+        </h2>
 
         <p>
-            Полная информация по сделке
+
+            {{ trade.comment|default:"Комментарий отсутствует" }}
+
         </p>
 
     </div>
 
-    <div class="detail-card">
+    {% if trade.screenshot %}
 
-        <div class="detail-grid">
+    <div class="image-box">
 
-            <div class="info-box">
+        <img
+            src="{{ trade.screenshot.url }}"
+            alt="Trade Screenshot"
+        >
 
-                <span>Дата</span>
+    </div>
 
-                <h3>
-                    {{ trade.date }}
-                </h3>
+    {% endif %}
 
-            </div>
+    <div class="detail-actions">
 
-            <div class="info-box">
+        <a
+            href="{% url 'edit_trade' trade.pk %}"
+            class="edit-btn"
+        >
 
-                <span>Актив</span>
+            <i class="bi bi-pencil-square"></i>
 
-                <h3>
-                    {{ trade.symbol }}
-                </h3>
-
-            </div>
-
-            <div class="info-box">
-
-                <span>Тип сделки</span>
-
-                <h3>
-                    {{ trade.trade_type }}
-                </h3>
-
-            </div>
-
-            <div class="info-box">
-
-                <span>Лот</span>
-
-                <h3>
-                    {{ trade.lot_size }}
-                </h3>
-
-            </div>
-
-            <div class="info-box">
-
-                <span>Цена входа</span>
-
-                <h3>
-                    {{ trade.entry_price }}
-                </h3>
-
-            </div>
-
-            <div class="info-box">
-
-                <span>Цена выхода</span>
-
-                <h3>
-                    {{ trade.exit_price|floatformat:2 }}
-                </h3>
-
-            </div>
-
-            <div class="info-box">
-
-                <span>Результат</span>
-
-                <h3 class="{% if trade.profit > 0 %}profit{% else %}loss{% endif %}">
-
-                    ${{ trade.profit|floatformat:2 }}
-
-                </h3>
-
-            </div>
-
-        </div>
-
-        <div class="comment-box">
-
-            <h2>
-                Комментарий
-            </h2>
-
-            <p>
-                {{ trade.comment }}
-            </p>
-
-        </div>
-
-        {% if trade.screenshot %}
-
-        <div class="image-box">
-
-            <img src="{{ trade.screenshot.url }}">
-
-        </div>
-
-        {% endif %}
-        <a href="{% url 'edit_trade' trade.pk %}" class="back-btn">
-
-            ✏️ Редактировать
+            Редактировать
 
         </a>
+
         <a
-    href="{% url 'delete_trade' trade.pk %}"
-    class="back-btn"
-    style="
-        background:#dc2626;
-        margin-left:10px;
-    "
->
+            href="{% url 'delete_trade' trade.pk %}"
+            class="delete-btn"
+        >
 
-    🗑️ Удалить
+            <i class="bi bi-trash"></i>
 
-</a>
+            Удалить
+
+        </a>
+
         <a
             href="{% url 'history' %}"
-            class="back-btn">
+            class="back-btn"
+        >
 
-            ← Назад к истории
+            <i class="bi bi-arrow-left"></i>
+
+            Назад к истории
 
         </a>
 
     </div>
 
 </div>
+
+</div>
+
 
 {% endblock %}

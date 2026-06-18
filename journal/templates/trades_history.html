@@ -555,6 +555,45 @@
 
     transform:translateY(-2px);
 }
+
+.result-tp{
+    background:#16a34a;
+    color:white;
+    padding:6px 12px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.result-sl{
+    background:#dc2626;
+    color:white;
+    padding:6px 12px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.result-manual{
+    background:#374151;
+    color:white;
+    padding:6px 12px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.trade-result{
+    margin:12px 0;
+}
+
+.trade-extra{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+    font-size:14px;
+    color:#9ca3af;
+}
 @media(max-width:768px){
 
     .history-toolbar{
@@ -604,21 +643,22 @@
 }
 
 </style>
-
 <div class="page-header">
 
-    <h1>
-        История сделок
-    </h1>
+```
+<h1>
+    История сделок
+</h1>
 
-    <p>
-        Все ваши сделки в одном месте
-    </p>
-    <div class="history-search">
+<p>
+    Все ваши сделки в одном месте
+</p>
 
-        <form method="GET">
+<div class="history-search">
 
-            <div class="search-box">
+    <form method="GET">
+
+        <div class="search-box">
 
             <input
                 type="text"
@@ -627,19 +667,20 @@
                 value="{{ search }}"
             >
 
-                <button type="submit">
+            <button type="submit">
 
-                    <i class="bi bi-search"></i>
+                <i class="bi bi-search"></i>
 
-                    Найти
+                Найти
 
-                </button>
+            </button>
 
-            </div>
+        </div>
 
-        </form>
+    </form>
 
-    </div>
+</div>
+
 <div class="history-toolbar">
 
     <div class="history-filters">
@@ -678,121 +719,215 @@
     </a>
 
 </div>
+
+
 </div>
 
 {% if trades %}
 
 <div class="history-grid">
 
-    {% for trade in trades %}
 
-    <div
-        class="trade-card"
-        onclick="window.location.href='{% url 'trade_detail' trade.id %}'"
-    >
+{% for trade in trades %}
 
-        <div class="trade-header">
+<div
+    class="trade-card"
+    onclick="window.location.href='{% url 'trade_detail' trade.id %}'"
+>
 
-            <div class="trade-symbol">
+    <div class="trade-header">
 
-                {{ trade.symbol }}
+        <div class="trade-symbol">
 
-            </div>
-
-            <div class="trade-type {% if trade.trade_type == 'BUY' %}buy{% else %}sell{% endif %}">
-
-                {{ trade.trade_type }}
-
-            </div>
+            {{ trade.symbol }}
 
         </div>
 
-        <div
-            class="trade-profit {% if trade.profit > 0 %}positive{% else %}negative{% endif %}"
-        >
+        <div class="trade-type {% if trade.trade_type == 'BUY' %}buy{% else %}sell{% endif %}">
 
-            ${{ trade.profit }}
-
-        </div>
-
-        <div class="trade-date">
-
-            {{ trade.date }}
-
-        </div>
-
-        <div class="trade-comment">
-
-            {{ trade.comment|truncatechars:35 }}
+            {{ trade.trade_type }}
 
         </div>
 
     </div>
 
-    {% endfor %}
+    <div class="trade-result">
 
-</div>
-<div class="pagination">
+        {% if trade.trade_result == 'TP' %}
 
-    {% if trades.has_previous %}
+            <span class="result-tp">
 
-        <a
-            href="?page={{ trades.previous_page_number }}"
-            class="page-btn"
-        >
+                <i class="bi bi-bullseye"></i>
 
-            ← Назад
+                TP
 
-        </a>
+            </span>
 
-    {% endif %}
+        {% elif trade.trade_result == 'SL' %}
 
-    {% for num in trades.paginator.page_range %}
+            <span class="result-sl">
 
-        {% if trades.number == num %}
+                <i class="bi bi-shield-x"></i>
 
-            <span class="page-current">
-
-                {{ num }}
+                SL
 
             </span>
 
         {% else %}
 
-            <a
-                href="?page={{ num }}"
-                class="page-btn"
-            >
+            <span class="result-manual">
 
-                {{ num }}
+                <i class="bi bi-hand-index-thumb"></i>
 
-            </a>
+                MANUAL
+
+            </span>
 
         {% endif %}
 
-    {% endfor %}
+    </div>
 
-    {% if trades.has_next %}
+    <div
+        class="trade-profit {% if trade.profit > 0 %}positive{% else %}negative{% endif %}"
+    >
+
+        ${{ trade.profit }}
+
+    </div>
+
+    <div class="trade-extra">
+
+        <div>
+
+            <i class="bi bi-box-arrow-in-right"></i>
+
+            {{ trade.entry_price }}
+
+        </div>
+
+        <div>
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            {{ trade.exit_price }}
+
+        </div>
+
+    </div>
+
+    <div class="trade-extra">
+
+        <div>
+
+            <i class="bi bi-bullseye"></i>
+
+            {{ trade.take_profit|default:"-" }}
+
+        </div>
+
+        <div>
+
+            <i class="bi bi-shield-x"></i>
+
+            {{ trade.stop_loss|default:"-" }}
+
+        </div>
+
+    </div>
+
+    <div class="trade-date">
+
+        <i class="bi bi-calendar-event"></i>
+
+        {{ trade.date }}
+
+    </div>
+
+    {% if trade.comment %}
+
+    <div class="trade-comment">
+
+        {{ trade.comment|truncatechars:20 }}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endfor %}
+```
+
+</div>
+
+<div class="pagination">
+
+
+{% if trades.has_previous %}
+
+    <a
+        href="?page={{ trades.previous_page_number }}"
+        class="page-btn"
+    >
+
+        ← Назад
+
+    </a>
+
+{% endif %}
+
+{% for num in trades.paginator.page_range %}
+
+    {% if trades.number == num %}
+
+        <span class="page-current">
+
+            {{ num }}
+
+        </span>
+
+    {% else %}
 
         <a
-            href="?page={{ trades.next_page_number }}"
+            href="?page={{ num }}"
             class="page-btn"
         >
 
-            Вперёд →
+            {{ num }}
 
         </a>
 
     {% endif %}
 
+{% endfor %}
+
+{% if trades.has_next %}
+
+    <a
+        href="?page={{ trades.next_page_number }}"
+        class="page-btn"
+    >
+
+        Вперёд →
+
+    </a>
+
+{% endif %}
+
+
 </div>
+
 {% else %}
 
 <div class="empty-box">
 
-    Сделок пока нет
+
+Сделок пока нет
+
 
 </div>
+
+
 
 {% endif %}
 

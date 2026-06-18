@@ -77,6 +77,13 @@ class Trade(models.Model):
         ('SELL', 'SELL'),
     )
 
+    TRADE_RESULTS = (
+
+        ('TP', 'Take Profit'),
+        ('SL', 'Stop Loss'),
+        ('MANUAL', 'Ручное закрытие'),
+    )
+
     date = models.DateField(
         verbose_name='Дата сделки'
     )
@@ -110,14 +117,37 @@ class Trade(models.Model):
         max_digits=12,
         decimal_places=5,
         default=0,
-        verbose_name='Вход'
+        verbose_name='Цена входа'
     )
 
     exit_price = models.DecimalField(
         max_digits=12,
         decimal_places=5,
         default=0,
-        verbose_name='Выход'
+        verbose_name='Цена выхода'
+    )
+
+    take_profit = models.DecimalField(
+        max_digits=12,
+        decimal_places=5,
+        null=True,
+        blank=True,
+        verbose_name='Take Profit'
+    )
+
+    stop_loss = models.DecimalField(
+        max_digits=12,
+        decimal_places=5,
+        null=True,
+        blank=True,
+        verbose_name='Stop Loss'
+    )
+
+    trade_result = models.CharField(
+        max_length=20,
+        choices=TRADE_RESULTS,
+        default='MANUAL',
+        verbose_name='Результат сделки'
     )
 
     comment = models.TextField(
@@ -151,8 +181,6 @@ class Trade(models.Model):
             f'{self.trade_type} | '
             f'{self.profit}$'
         )
-
-
 
 
 class TodoTask(models.Model):

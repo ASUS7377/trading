@@ -646,6 +646,7 @@ def calendar_view(request):
         'calendar.html',
         context
     )
+
 @login_required
 def statistics_view(request):
 
@@ -686,6 +687,18 @@ def statistics_view(request):
         trade_type='SELL'
     ).count()
 
+    tp_count = trades.filter(
+        trade_result='TP'
+    ).count()
+
+    sl_count = trades.filter(
+        trade_result='SL'
+    ).count()
+
+    manual_count = trades.filter(
+        trade_result='MANUAL'
+    ).count()
+
     current_balance = (
         profile.initial_balance
         + total_profit
@@ -698,6 +711,18 @@ def statistics_view(request):
         win_rate = round(
             (
                 winning_trades
+                / total_trades
+            ) * 100,
+            2
+        )
+
+    tp_rate = 0
+
+    if total_trades > 0:
+
+        tp_rate = round(
+            (
+                tp_count
                 / total_trades
             ) * 100,
             2
@@ -760,6 +785,14 @@ def statistics_view(request):
 
         'sell_count': sell_count,
 
+        'tp_count': tp_count,
+
+        'sl_count': sl_count,
+
+        'manual_count': manual_count,
+
+        'tp_rate': tp_rate,
+
         'win_rate': win_rate,
 
         'best_trade': best_trade,
@@ -777,8 +810,6 @@ def statistics_view(request):
         'statistics.html',
         context
     )
-
-
 def login_view(request):
 
     if request.user.is_authenticated:
@@ -1301,8 +1332,6 @@ def update_goal_view(request):
     )
 
 
-
-
 @login_required
 def export_trades_excel(request):
 
@@ -1314,17 +1343,42 @@ def export_trades_excel(request):
 
     worksheet = workbook.active
 
-    worksheet.title = 'Сделки'
+    worksheet.title = 'Trading Journal'
 
-    worksheet.append([
+    headers = [
+
         'Дата',
         'Актив',
-        'Тип',
+        'Тип сделки',
+        'Лот',
         'Цена входа',
         'Цена выхода',
-        'Прибыль',
+        'Take Profit',
+        'Stop Loss',
+        'Тип закрытия',
+        'Прибыль / Убыток',
         'Комментарий'
-    ])
+
+    ]
+
+    worksheet.append(headers)
+
+    from openpyxl.styles import Font, PatternFill
+
+    header_fill = PatternFill(
+        fill_type="solid",
+        start_color="1E293B"
+    )
+
+    header_font = Font(
+        bold=True,
+        color="FFFFFF"
+    )
+
+    for cell in worksheet[1]:
+
+        cell.fill = header_fill
+        cell.font = header_font
 
     for trade in trades:
 
@@ -1336,15 +1390,77 @@ def export_trades_excel(request):
 
             trade.trade_type,
 
+            trade.lot_size,
+
             trade.entry_price,
 
             trade.exit_price,
+
+            trade.take_profit,
+
+            trade.stop_loss,
+
+            trade.get_trade_result_display(),
 
             trade.profit,
 
             trade.comment,
 
         ])
+
+    green_fill = PatternFill(
+        fill_type="solid",
+        start_color="DCFCE7"
+    )
+
+    red_fill = PatternFill(
+        fill_type="solid",
+        start_color="FEE2E2"
+    )
+
+    for row in worksheet.iter_rows(
+        min_row=2
+    ):
+
+        profit_cell = row[9]
+
+        try:
+
+            if float(profit_cell.value) > 0:
+
+                profit_cell.fill = green_fill
+
+            elif float(profit_cell.value) < 0:
+
+                profit_cell.fill = red_fill
+
+        except:
+
+            pass
+
+    for column in worksheet.columns:
+
+        max_length = 0
+
+        column_letter = column[0].column_letter
+
+        for cell in column:
+
+            try:
+
+                if len(str(cell.value)) > max_length:
+
+                    max_length = len(
+                        str(cell.value)
+                    )
+
+            except:
+
+                pass
+
+        worksheet.column_dimensions[
+            column_letter
+        ].width = max_length + 5
 
     response = HttpResponse(
 
@@ -1356,7 +1472,7 @@ def export_trades_excel(request):
     response[
         'Content-Disposition'
     ] = (
-        'attachment; filename=trades.xlsx'
+        'attachment; filename=Trading_Journal.xlsx'
     )
 
     workbook.save(
@@ -1364,8 +1480,6 @@ def export_trades_excel(request):
     )
 
     return response
-
-
 
 
 @login_required

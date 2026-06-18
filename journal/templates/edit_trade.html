@@ -175,6 +175,62 @@ textarea{
 
     margin-top:20px;
 }
+.current-image{
+    margin-top:30px;
+}
+
+.current-image h3{
+    margin-bottom:15px;
+}
+
+.current-image img{
+    width:100%;
+    max-width:800px;
+    border-radius:20px;
+    border:1px solid #334155;
+}
+
+.detail-actions{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:30px;
+}
+
+.detail-actions button{
+    border:none;
+    cursor:pointer;
+}
+.back-btn{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:250px;
+    height:60px;
+
+    background:#1f2937;
+    color:white !important;
+
+    text-decoration:none;
+
+    border-radius:14px;
+
+    font-size:16px;
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.back-btn:hover{
+
+    background:#374151;
+
+    transform:translateY(-2px);
+
+    color:white !important;
+}
 
 @media(max-width:768px){
 
@@ -214,179 +270,281 @@ textarea{
 }
 
 </style>
+
 <div class="profile-page">
 
-    <div class="profile-card">
+<div class="profile-card">
 
-        <h1>
-            Редактировать сделку
-        </h1>
+    <h1>
 
-        <form method="post" enctype="multipart/form-data">
+        <i class="bi bi-pencil-square"></i>
 
-            {% csrf_token %}
+        Редактировать сделку
 
-            <div class="form-group">
+    </h1>
 
-                <label>
-                    Дата сделки
-                </label>
+    <form method="post" enctype="multipart/form-data">
 
-                {{ form.date }}
+        {% csrf_token %}
 
-            </div>
+        <div class="form-group">
 
-            <div class="form-group">
+            <label>
 
-                <label>
-                    Актив
-                </label>
+                <i class="bi bi-calendar-event"></i>
 
-                {{ form.symbol }}
+                Дата сделки
 
-            </div>
+            </label>
 
-            <div class="form-group">
+            {{ form.date }}
 
-                <label>
-                    Лот
-                </label>
+        </div>
 
-                {{ form.lot_size }}
+        <div class="form-group">
 
-            </div>
+            <label>
 
-            <div class="form-group">
+                <i class="bi bi-graph-up"></i>
 
-                <label>
-                    Цена входа
-                </label>
+                Актив
 
-                {{ form.entry_price }}
+            </label>
 
-            </div>
+            {{ form.symbol }}
 
-            <div class="form-group">
+        </div>
 
-                <label>
-                    Цена выхода
-                </label>
+        <div class="form-group">
 
-                {{ form.exit_price }}
+            <label>
 
-            </div>
+                <i class="bi bi-layers"></i>
 
-            <div class="form-group">
+                Лот
 
-                <label>
-                    Тип сделки
-                </label>
+            </label>
 
-                <div class="trade-buttons">
+            {{ form.lot_size }}
 
-                    <input
-                        type="radio"
-                        id="buy"
-                        name="trade_type"
-                        value="BUY"
-                        {% if trade.trade_type == 'BUY' %}
-                        checked
-                        {% endif %}
-                    >
+        </div>
 
-                    <label
-                        for="buy"
-                        class="buy-btn">
+        <div class="form-group">
 
-                        BUY
+            <label>
 
-                    </label>
+                <i class="bi bi-box-arrow-in-right"></i>
 
-                    <input
-                        type="radio"
-                        id="sell"
-                        name="trade_type"
-                        value="SELL"
-                        {% if trade.trade_type == 'SELL' %}
-                        checked
-                        {% endif %}
-                    >
+                Цена входа
 
-                    <label
-                        for="sell"
-                        class="sell-btn">
+            </label>
 
-                        SELL
+            {{ form.entry_price }}
 
-                    </label>
+        </div>
 
-                </div>
+        <div class="form-group">
 
-            </div>
+            <label>
 
-            <div class="form-group">
+                <i class="bi bi-box-arrow-right"></i>
 
-                <label>
-                    Прибыль / Убыток
-                </label>
+                Цена выхода
 
-                {{ form.profit }}
+            </label>
 
-            </div>
+            {{ form.exit_price }}
 
-            <div class="form-group">
+        </div>
 
-                <label>
-                    Комментарий
-                </label>
+        <div class="form-group">
 
-                {{ form.comment }}
+            <label>
 
-            </div>
+                <i class="bi bi-bullseye"></i>
 
-            <div class="form-group">
+                Take Profit
 
-                <label>
-                    Скриншот
-                </label>
+            </label>
 
-                {{ form.screenshot }}
+            {{ form.take_profit }}
 
-            </div>
+        </div>
 
-            {% if trade.screenshot %}
+        <div class="form-group">
 
-            <div
-                style="
-                    margin-top:20px;
-                "
-            >
+            <label>
 
-                <img
-                    src="{{ trade.screenshot.url }}"
-                    style="
-                        width:100%;
-                        max-width:700px;
-                        border-radius:20px;
-                    "
+                <i class="bi bi-shield-x"></i>
+
+                Stop Loss
+
+            </label>
+
+            {{ form.stop_loss }}
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                <i class="bi bi-flag"></i>
+
+                Тип закрытия
+
+            </label>
+
+            {{ form.trade_result }}
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                <i class="bi bi-arrow-left-right"></i>
+
+                Тип сделки
+
+            </label>
+
+            <div class="trade-buttons">
+
+                <input
+                    type="radio"
+                    id="buy"
+                    name="trade_type"
+                    value="BUY"
+                    {% if trade.trade_type == 'BUY' %}
+                    checked
+                    {% endif %}
                 >
 
+                <label
+                    for="buy"
+                    class="buy-btn"
+                >
+
+                    BUY
+
+                </label>
+
+                <input
+                    type="radio"
+                    id="sell"
+                    name="trade_type"
+                    value="SELL"
+                    {% if trade.trade_type == 'SELL' %}
+                    checked
+                    {% endif %}
+                >
+
+                <label
+                    for="sell"
+                    class="sell-btn"
+                >
+
+                    SELL
+
+                </label>
+
             </div>
 
-            {% endif %}
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                <i class="bi bi-currency-dollar"></i>
+
+                Прибыль / Убыток
+
+            </label>
+
+            {{ form.profit }}
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                <i class="bi bi-chat-left-text"></i>
+
+                Комментарий
+
+            </label>
+
+            {{ form.comment }}
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+
+                <i class="bi bi-image"></i>
+
+                Скриншот
+
+            </label>
+
+            {{ form.screenshot }}
+
+        </div>
+
+        {% if trade.screenshot %}
+
+        <div class="current-image">
+
+            <h3>
+
+                <i class="bi bi-image"></i>
+
+                Текущий скриншот
+
+            </h3>
+
+            <img
+                src="{{ trade.screenshot.url }}"
+                alt="Trade Screenshot"
+            >
+
+        </div>
+
+        {% endif %}
+
+        <div class="detail-actions">
 
             <button
                 type="submit"
                 class="save-btn"
             >
 
+                <i class="bi bi-floppy"></i>
+
                 Сохранить изменения
 
             </button>
 
-        </form>
+            <a
+                href="{% url 'trade_detail' trade.pk %}"
+                class="back-btn"
+            >
 
-    </div>
+                <i class="bi bi-arrow-left"></i>
+
+                Назад к сделке
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
 
 </div>
 

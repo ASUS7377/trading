@@ -34,14 +34,21 @@ class ProfileForm(forms.ModelForm):
 
         }
 
-
 class TradeForm(forms.ModelForm):
 
     class Meta:
 
         model = Trade
 
-        exclude = ['trade_type']
+        exclude = [
+
+            'trade_type',
+
+            'user',
+
+            'created_at',
+
+        ]
 
         widgets = {
 
@@ -60,17 +67,40 @@ class TradeForm(forms.ModelForm):
 
             'lot_size': forms.NumberInput(
                 attrs={
-                    'class': 'form-control'
+                    'class': 'form-control',
+                    'step': '0.01'
                 }
             ),
 
             'entry_price': forms.NumberInput(
                 attrs={
-                    'class': 'form-control'
+                    'class': 'form-control',
+                    'step': '0.00001'
                 }
             ),
 
             'exit_price': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'step': '0.00001'
+                }
+            ),
+
+            'take_profit': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'step': '0.00001'
+                }
+            ),
+
+            'stop_loss': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'step': '0.00001'
+                }
+            ),
+
+            'trade_result': forms.Select(
                 attrs={
                     'class': 'form-control'
                 }
@@ -78,14 +108,16 @@ class TradeForm(forms.ModelForm):
 
             'profit': forms.NumberInput(
                 attrs={
-                    'class': 'form-control'
+                    'class': 'form-control',
+                    'step': '0.01'
                 }
             ),
 
             'comment': forms.Textarea(
                 attrs={
                     'class': 'form-control',
-                    'rows': 6
+                    'rows': 6,
+                    'placeholder': 'Что произошло в этой сделке?'
                 }
             ),
 
@@ -96,7 +128,6 @@ class TradeForm(forms.ModelForm):
             ),
 
         }
-
 
 
 

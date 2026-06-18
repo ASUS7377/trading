@@ -111,198 +111,403 @@
 
 }
 </style>
+
+
 <div class="page-header">
 
-    <h1>Статистика</h1>
 
-    <p>
-        Полная аналитика торгового журнала
-    </p>
+<h1>
+
+    <i class="bi bi-bar-chart-fill"></i>
+
+    Статистика
+
+</h1>
+
+<p>
+    Полная аналитика торгового журнала
+</p>
 
 </div>
 
 <div class="stats-grid">
 
-    <div class="stat-card">
 
-        <h3>Текущий баланс</h3>
+<div class="stat-card">
 
-        <div class="value">
-            ${{ current_balance|floatformat:2 }}
-        </div>
+    <h3>
 
-    </div>
+        <i class="bi bi-wallet2"></i>
 
-    <div class="stat-card">
+        Текущий баланс
 
-        <h3>Общая прибыль</h3>
+    </h3>
 
-        <div class="value positive">
-            ${{ total_profit|floatformat:2 }}
-        </div>
+    <div class="value">
+
+        ${{ current_balance|floatformat:2 }}
 
     </div>
 
-    <div class="stat-card">
+</div>
 
-        <h3>Всего сделок</h3>
+<div class="stat-card">
 
-        <div class="value">
-            {{ total_trades }}
-        </div>
+    <h3>
+
+        <i class="bi bi-graph-up-arrow"></i>
+
+        Общая прибыль
+
+    </h3>
+
+    <div class="value positive">
+
+        ${{ total_profit|floatformat:2 }}
+
+    </div>
+
+</div>
+
+<div class="stat-card">
+
+    <h3>
+
+        <i class="bi bi-journal-check"></i>
+
+        Всего сделок
+
+    </h3>
+
+    <div class="value">
+
+        {{ total_trades }}
 
     </div>
 
-    <div class="stat-card">
+</div>
 
-        <h3>Успешность
-</h3>
+<div class="stat-card">
 
-        <div class="value">
-            {{ win_rate }}%
-        </div>
+    <h3>
+
+        <i class="bi bi-percent"></i>
+
+        Win Rate
+
+    </h3>
+
+    <div class="value">
+
+        {{ win_rate }}%
 
     </div>
+
+</div>
+
+<div class="stat-card">
+
+    <h3>
+
+        <i class="bi bi-bullseye"></i>
+
+        TP Hits
+
+    </h3>
+
+    <div class="value positive">
+
+        {{ tp_count }}
+
+    </div>
+
+</div>
+
+<div class="stat-card">
+
+    <h3>
+
+        <i class="bi bi-shield-x"></i>
+
+        SL Hits
+
+    </h3>
+
+    <div class="value negative">
+
+        {{ sl_count }}
+
+    </div>
+
+</div>
+
+<div class="stat-card">
+
+    <h3>
+
+        <i class="bi bi-hand-index-thumb"></i>
+
+        Manual Close
+
+    </h3>
+
+    <div class="value">
+
+        {{ manual_count }}
+
+    </div>
+
+</div>
+
+<div class="stat-card">
+
+    <h3>
+
+        <i class="bi bi-trophy"></i>
+
+        TP Rate
+
+    </h3>
+
+    <div class="value positive">
+
+        {{ tp_rate }}%
+
+    </div>
+
+</div>
+
 
 </div>
 
 <div class="chart-grid">
 
-    <div class="chart-card">
 
-        <div class="chart-header">
+<div class="chart-card">
 
-            <h2>Рост депозита</h2>
+    <div class="chart-header">
 
-            <span>
-                Динамика баланса
-            </span>
+        <h2>
 
-        </div>
+            <i class="bi bi-graph-up"></i>
 
-        <canvas id="equityChart"></canvas>
+            Рост депозита
 
-    </div>
+        </h2>
 
-    <div class="chart-card">
+        <span>
 
-        <div class="chart-header">
+            Динамика баланса
 
-            <h2>Активы</h2>
-
-            <span>
-                Самые используемые инструменты
-            </span>
-
-        </div>
-
-        <canvas id="assetsChart"></canvas>
+        </span>
 
     </div>
+
+    <canvas id="equityChart"></canvas>
 
 </div>
+
+<div class="chart-card">
+
+    <div class="chart-header">
+
+        <h2>
+
+            <i class="bi bi-pie-chart-fill"></i>
+
+            Активы
+
+        </h2>
+
+        <span>
+
+            Самые используемые инструменты
+
+        </span>
+
+    </div>
+
+    <canvas id="assetsChart"></canvas>
+
+</div>
+
+
+</div>
+
 <div class="bottom-grid">
 
-    <div class="chart-card">
+<div class="chart-card">
 
-        <div class="chart-header">
+    <div class="chart-header">
 
-            <h2>Прибыльные / Убыточные</h2>
+        <h2>
 
-        </div>
+            <i class="bi bi-cash-stack"></i>
 
-        <canvas id="resultChart"></canvas>
+            Прибыльные / Убыточные
+
+        </h2>
+
+    </div>
+
+    <canvas id="resultChart"></canvas>
+
+</div>
+
+<div class="chart-card">
+
+    <div class="chart-header">
+
+        <h2>
+
+            <i class="bi bi-arrow-left-right"></i>
+
+            BUY / SELL
+
+        </h2>
 
     </div>
 
-    <div class="chart-card">
+    <canvas id="typeChart"></canvas>
 
-        <div class="chart-header">
+</div>
+<div class="chart-card">
 
-            <h2>BUY / SELL</h2>
+    <div class="chart-header">
 
-        </div>
+        <h2>
 
-        <canvas id="typeChart"></canvas>
-        
+            <i class="bi bi-bullseye"></i>
+
+            TP / SL / Manual
+
+        </h2>
+
+        <span>
+
+            Типы закрытия сделок
+
+        </span>
 
     </div>
+
+    <canvas id="tpChart"></canvas>
+
+</div>
 
 </div>
 
 <div class="trade-grid">
 
-    <div class="info-card">
 
-        <h2>
-            Лучшая сделка
-        </h2>
+<div class="info-card">
 
-        {% if best_trade %}
+    <h2>
 
-        <div class="trade-box">
+        <i class="bi bi-trophy-fill"></i>
 
-            <h3>
-                {{ best_trade.symbol }}
-            </h3>
+        Лучшая сделка
 
-            <p>
-                {{ best_trade.trade_type }}
-            </p>
+    </h2>
 
-            <div class="value positive">
-                ${{ best_trade.profit|floatformat:2 }}
-            </div>
+    {% if best_trade %}
+
+    <div class="trade-box">
+
+        <h3>
+
+            {{ best_trade.symbol }}
+
+        </h3>
+
+        <p>
+
+            {{ best_trade.trade_type }}
+
+        </p>
+
+        <p>
+
+            {{ best_trade.trade_result }}
+
+        </p>
+
+        <div class="value positive">
+
+            ${{ best_trade.profit|floatformat:2 }}
 
         </div>
 
-        {% else %}
-
-        <p class="empty-text">
-            Пока нет данных
-        </p>
-
-        {% endif %}
-
     </div>
 
-    <div class="info-card">
+    {% else %}
 
-        <h2>
-            Худшая сделка
-        </h2>
+    <p class="empty-text">
 
-        {% if worst_trade %}
+        Пока нет данных
 
-        <div class="trade-box">
+    </p>
 
-            <h3>
-                {{ worst_trade.symbol }}
-            </h3>
+    {% endif %}
 
-            <p>
-                {{ worst_trade.trade_type }}
-            </p>
+</div>
 
-            <div class="value negative">
-                ${{ worst_trade.profit|floatformat:2 }}
-            </div>
+<div class="info-card">
+
+    <h2>
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+        Худшая сделка
+
+    </h2>
+
+    {% if worst_trade %}
+
+    <div class="trade-box">
+
+        <h3>
+
+            {{ worst_trade.symbol }}
+
+        </h3>
+
+        <p>
+
+            {{ worst_trade.trade_type }}
+
+        </p>
+
+        <p>
+
+            {{ worst_trade.trade_result }}
+
+        </p>
+
+        <div class="value negative">
+
+            ${{ worst_trade.profit|floatformat:2 }}
 
         </div>
 
-        {% else %}
-
-        <p class="empty-text">
-            Пока нет данных
-        </p>
-
-        {% endif %}
-
     </div>
+
+    {% else %}
+
+    <p class="empty-text">
+
+        Пока нет данных
+
+    </p>
+
+    {% endif %}
+
+</div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
 
 const equityChart =
@@ -568,6 +773,78 @@ assetsChart,
                 '#eab308',
                 '#ec4899'
 
+            ]
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        maintainAspectRatio:false,
+
+        cutout:'60%',
+
+        radius:'85%',
+
+        plugins:{
+
+            legend:{
+
+                position:'bottom',
+
+                labels:{
+
+                    color:'white',
+
+                    boxWidth:12,
+
+                    padding:15
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+);
+
+const tpChart =
+document.getElementById(
+'tpChart'
+);
+
+new Chart(
+tpChart,
+{
+
+    type:'doughnut',
+
+    data:{
+
+        labels:[
+            'TP',
+            'SL',
+            'MANUAL'
+        ],
+
+        datasets:[{
+
+            data:[
+                {{ tp_count }},
+                {{ sl_count }},
+                {{ manual_count }}
+            ],
+
+            backgroundColor:[
+                '#22c55e',
+                '#ef4444',
+                '#3b82f6'
             ]
 
         }]

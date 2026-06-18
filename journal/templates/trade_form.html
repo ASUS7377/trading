@@ -144,146 +144,173 @@
 }
 
 </style>
-
 <div class="trade-page">
 
-    <div class="trade-header">
 
-        <h1>
-            Добавить сделку
-        </h1>
+<div class="trade-header">
 
-        <p>
-            Добавьте новую сделку в торговый журнал
-        </p>
+    <h1>
+        Добавить сделку
+    </h1>
 
-    </div>
+    <p>
+        Добавьте новую сделку в торговый журнал
+    </p>
 
-    <div class="trade-card">
+</div>
 
-        <form method="post" enctype="multipart/form-data">
+<div class="trade-card">
 
-            {% csrf_token %}
+    <form method="post" enctype="multipart/form-data">
 
-            <div class="trade-grid">
+        {% csrf_token %}
 
-                <div class="form-group">
+        <div class="trade-grid">
 
-                    <label>Дата сделки</label>
+            <div class="form-group">
 
-                    {{ form.date }}
+                <label>Дата сделки</label>
 
-                </div>
+                {{ form.date }}
 
-                <div class="form-group">
+            </div>
 
-                    <label>Актив</label>
+            <div class="form-group">
 
-                    {{ form.symbol }}
+                <label>Актив</label>
 
-                </div>
+                {{ form.symbol }}
 
-                <div class="form-group">
+            </div>
 
-                    <label>Лот</label>
+            <div class="form-group">
 
-                    {{ form.lot_size }}
+                <label>Лот</label>
 
-                </div>
+                {{ form.lot_size }}
 
-                <div class="form-group">
+            </div>
 
-                    <label>Цена входа</label>
+            <div class="form-group">
 
-                    {{ form.entry_price }}
+                <label>Цена входа</label>
 
-                </div>
+                {{ form.entry_price }}
 
-                <div class="form-group">
+            </div>
 
-                    <label>Цена выхода</label>
+            <div class="form-group">
 
-                    {{ form.exit_price }}
+                <label>Цена выхода</label>
 
-                </div>
+                {{ form.exit_price }}
 
-                <div class="form-group">
+            </div>
 
-                    <label>Прибыль / Убыток ($)</label>
+            <div class="form-group">
 
-                    {{ form.profit }}
+                <label>Take Profit </label>
 
-                </div>
+                {{ form.take_profit }}
 
-                <div class="form-group full-width">
+            </div>
 
-                    <label>Тип сделки</label>
+            <div class="form-group">
 
-                    <div class="trade-buttons">
+                <label>Stop Loss </label>
 
-                        <input
-                            type="radio"
-                            id="buy"
-                            name="trade_type"
-                            value="BUY"
-                            required>
+                {{ form.stop_loss }}
 
-                        <label
-                            for="buy"
-                            class="buy-btn">
+            </div>
 
-                            BUY
+            <div class="form-group">
 
-                        </label>
+                <label>Результат сделки</label>
 
-                        <input
-                            type="radio"
-                            id="sell"
-                            name="trade_type"
-                            value="SELL">
+                {{ form.trade_result }}
 
-                        <label
-                            for="sell"
-                            class="sell-btn">
+            </div>
 
-                            SELL
+            <div class="form-group">
 
-                        </label>
+                <label>Прибыль / Убыток ($)</label>
 
-                    </div>
+                {{ form.profit }}
 
-                </div>
+            </div>
 
-                <div class="form-group full-width">
+            <div class="form-group full-width">
 
-                    <label>Комментарий</label>
+                <label>Тип сделки</label>
 
-                    {{ form.comment }}
+                <div class="trade-buttons">
 
-                </div>
+                    <input
+                        type="radio"
+                        id="buy"
+                        name="trade_type"
+                        value="BUY"
+                        required
+                    >
 
-                <div class="form-group full-width">
+                    <label
+                        for="buy"
+                        class="buy-btn"
+                    >
+                        BUY
+                    </label>
 
-                    <label>Скриншот сделки</label>
+                    <input
+                        type="radio"
+                        id="sell"
+                        name="trade_type"
+                        value="SELL"
+                    >
 
-                    {{ form.screenshot }}
+                    <label
+                        for="sell"
+                        class="sell-btn"
+                    >
+                        SELL
+                    </label>
 
                 </div>
 
             </div>
 
-            <button
-                type="submit"
-                class="save-btn">
+            <div class="form-group full-width">
 
-                Сохранить сделку
+                <label>Комментарий</label>
 
-            </button>
+                {{ form.comment }}
 
-        </form>
+            </div>
 
-    </div>
+            <div class="form-group full-width">
+
+                <label>Скриншот сделки</label>
+
+                {{ form.screenshot }}
+
+            </div>
+
+        </div>
+
+        <button
+            type="submit"
+            class="save-btn"
+        >
+
+            Сохранить сделку
+
+        </button>
+
+    </form>
 
 </div>
+
+
+</div>
+
 
 {% endblock %}
