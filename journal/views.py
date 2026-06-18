@@ -433,7 +433,6 @@ def trades_history(request):
 
         }
     )
-
 @login_required
 def calendar_view(request):
 
@@ -443,6 +442,8 @@ def calendar_view(request):
 
     trades = Trade.objects.filter(
         user=request.user
+    ).order_by(
+        'date'
     )
 
     year = request.GET.get(
@@ -470,23 +471,19 @@ def calendar_view(request):
         month = int(month)
 
     prev_month = month - 1
-
     prev_year = year
 
     next_month = month + 1
-
     next_year = year
 
     if prev_month < 1:
 
         prev_month = 12
-
         prev_year -= 1
 
     if next_month > 12:
 
         next_month = 1
-
         next_year += 1
 
     cal = calendar.monthcalendar(
@@ -496,11 +493,11 @@ def calendar_view(request):
 
     calendar_days = []
 
-    start_balance = 0
+    initial_balance = 0
 
     if profile:
 
-        start_balance = float(
+        initial_balance = float(
             profile.initial_balance
         )
 
@@ -518,30 +515,45 @@ def calendar_view(request):
 
                 continue
 
-            day_profit = 0
+            current_date = date(
+                year,
+                month,
+                day
+            )
 
             day_trades = Trade.objects.filter(
                 user=request.user,
-                date__year=year,
-                date__month=month,
-                date__day=day
+                date=current_date
             )
 
-            for trade in day_trades:
+            day_profit = sum(
+                float(trade.profit)
+                for trade in day_trades
+            )
 
-                day_profit += float(
-                    trade.profit
+            previous_trades = Trade.objects.filter(
+                user=request.user,
+                date__lt=current_date
+            )
+
+            balance_before_day = (
+                initial_balance
+                +
+                sum(
+                    float(trade.profit)
+                    for trade in previous_trades
                 )
+            )
 
             percent = 0
 
-            if start_balance > 0:
+            if balance_before_day > 0:
 
                 percent = round(
                     (
                         day_profit
                         /
-                        start_balance
+                        balance_before_day
                     ) * 100,
                     2
                 )
@@ -646,7 +658,6 @@ def calendar_view(request):
         'calendar.html',
         context
     )
-
 @login_required
 def statistics_view(request):
 
